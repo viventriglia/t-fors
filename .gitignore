@@ -46,6 +46,5 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-data/in
-data/out
-#!data/in/demo.xlsx
+data/in/*.csv
+data/out/*.csv
