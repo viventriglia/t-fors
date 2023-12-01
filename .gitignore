@@ -6,22 +6,14 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
-develop-eggs/
 dist/
 downloads/
-eggs/
-.eggs/
 lib/
 lib64/
-parts/
-sdist/
 var/
 wheels/
 share/python-wheels/
-*.egg-info/
 .installed.cfg
-*.egg
-MANIFEST
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -55,4 +47,5 @@ dmypy.json
 cython_debug/
 
 data/in
+data/out
 #!data/in/demo.xlsx
