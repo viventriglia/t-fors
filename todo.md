@@ -1,6 +1,13 @@
 TODO Integrare SMR e HP_30
-TODO Decomposizione della serie temporale (STL), oltre a (P)ACF
+TODO Decomposizione della serie temporale (STL, pyquant), oltre a (P)ACF
 TODO Profiling dei dati con stumpy?
-TODO Sperimentare Nixtla per il forecast e l'analisi della serie storica
-TODO Individuare il metodo più appropriato per train-test split, evaluation metric ed eventuale stratificazione
+TODO Sperimentare [Nixtla](https://www.nixtla.io/open-source) per il forecast e l'analisi della serie storica [esempio](https://nixtlaverse.nixtla.io/mlforecast/docs/getting-started/end_to_end_walkthrough.html)
+TODO Individuare il metodo più appropriato per train-test split, evaluation metric ed eventuale stratificazione --> TimeSeriesSplit (sklearn) and [cross validation in Nixtla](https://nixtlaverse.nixtla.io/statsforecast/docs/tutorials/crossvalidation.html)
 TODO mlflow per tracciare gli esperimenti di ML
+TODO [has_time parameter](https://catboost.ai/en/docs/references/training-parameters/common#has_time) in CatBoost
+
+From 1st Review Meeting:
+TODO 0 means no data (impute nan), 0.1 means no activity; I would model that with categories: NaN, no activity, low and high activity
+TODO consider f10.7 from the previous day
+TODO rate of change in IL might be helpful (suggestion by Hermann Opgenoorth); we could consider a decomposition according to the first derivative of the geomagnetic indices --> k-means on FB-EMA
+TODO consider solar zenith angle instead of local time (we will rely on [ephem](https://pypi.org/project/ephem/) library)
