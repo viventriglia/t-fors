@@ -1,6 +1,7 @@
 from typing import Literal
 
 import pandas as pd
+import numpy as np
 import pvlib
 
 from src.var import LATITUDE, LONGITUDE
@@ -33,6 +34,21 @@ def resample_time_series(
     return df.resample(time_interval, on=on_column).agg(aggregation_function)
 
 
+def log_transform(X: pd.DataFrame) -> pd.DataFrame:
+    """
+    Convenience function to apply a log transformation
+
+    Parameters
+    ----------
+    X : pd.DataFrame
+
+    Returns
+    -------
+    pd.DataFrame
+    """
+    return X.apply(np.log1p)
+
+
 def get_solar_position(
     time: pd.DatetimeIndex,
     columns: Literal[
@@ -47,7 +63,7 @@ def get_solar_position(
     longitude: float = LONGITUDE,
 ) -> pd.DataFrame:
     """
-    A convenience wrapper for solar position data
+    Convenience wrapper for solar position data
 
     Parameters
     ----------
