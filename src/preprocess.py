@@ -1,6 +1,9 @@
 from typing import Literal
 
 import pandas as pd
+import pvlib
+
+from src.var import LATITUDE, LONGITUDE
 
 
 def resample_time_series(
@@ -28,3 +31,37 @@ def resample_time_series(
     pd.DataFrame
     """
     return df.resample(time_interval, on=on_column).agg(aggregation_function)
+
+
+def get_solar_position(
+    time: pd.DatetimeIndex,
+    columns: Literal[
+        "apparent_zenith",
+        "zenith",
+        "apparent_elevation",
+        "elevation",
+        "azimuth",
+        "equation_of_time",
+    ] = ["zenith"],
+    latitude: float = LATITUDE,
+    longitude: float = LONGITUDE,
+) -> pd.DataFrame:
+    """
+    A convenience wrapper for solar position data
+
+    Parameters
+    ----------
+    time : pd.DatetimeIndex
+        Must be localized or UTC will be assumed
+    columns : list[str], optional
+        Solar position attributes to return, by default ["zenith"]
+    latitude : float
+        Latitude in decimal degrees; positive north of equator, negative to south
+    longitude : float
+        Longitude in decimal degrees; positive east of prime meridian, negative to west
+
+    Returns
+    -------
+    pd.DataFrame
+    """
+    return pvlib.solarposition.get_solarposition(time, latitude, longitude)[columns]
