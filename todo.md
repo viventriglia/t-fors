@@ -10,11 +10,12 @@ TODO Calibrazione del classificatore! [sklearn doc](https://scikit-learn.org/sta
 From 1st Review Meeting:
 TODO 0 means no data (impute nan), 0.1 means no activity; I would model that with categories: NaN, no activity, low and high activity
 TODO consider f10.7 from the previous day
-TODO rate of change in IL might be helpful (suggestion by Hermann Opgenoorth); we could consider a decomposition according to the first derivative of the geomagnetic indices
-- [x] consider solar zenith angle instead of local time (we will rely on [ephem](https://pypi.org/project/ephem/) library)
+- [x] rate of change in IL might be helpful (suggestion by Hermann Opgenoorth); we could consider a decomposition according to the first derivative of the geomagnetic indices
+- [x] consider solar zenith angle instead of local time
 
 Feedback:
-TODO imposta 350km di altitudine per SZA
+- [x] imposta 350km di altitudine per SZA
+TODO Plot delle feature e del target entro una finestra di ±3h
 TODO Integrare SMR e HP_30
 TODO Derivata prima categorizzata di IE --> k-means on FB-EMA
 TODO Integra IL e IU con derivata prima categorizzata
