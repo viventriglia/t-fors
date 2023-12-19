@@ -48,3 +48,6 @@ cython_debug/
 
 data/in/*.csv
 data/out/*.csv
+
+# CatBoost model stuff
+jupyters/catboost_info/*

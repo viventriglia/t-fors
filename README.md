@@ -19,4 +19,4 @@ Otherwise, you can activate the virtual environment manually and then execute th
 
 ## How can I help?
 
-### To-Do list [WIP]
+An (hopefully) up-to-date list of things to do can be found [here](https://github.com/viventriglia/t-fors/blob/develop/todo.md?plain=1)
