@@ -2,6 +2,7 @@ from typing import Literal
 
 import pandas as pd
 import numpy as np
+from sklearn.cluster import KMeans
 import pvlib
 
 from src.var import LATITUDE, LONGITUDE, ALTITUDE
@@ -93,3 +94,49 @@ def get_solar_position(
         altitude=altitude,
         **kwargs,  # FIXME is SZA accurate for 350km altitude?
     )[columns]
+
+
+def get_categories(
+    series: pd.Series, window: int = 20, n_categories: int = 3
+) -> tuple[pd.Series, np.ndarray]:
+    """
+    The function filters the time series with a forward-backward (FB) exponential moving average (EMA),
+    fits a K-Means clustering algorithm and returns FB-EMA values along with the estimated labels (categories)
+
+    Parameters
+    ----------
+    series : pd.Series
+        Time series to filter and categorise
+    window : int, optional
+        Time window for smoothing, by default 20
+    n_categories : int, optional
+        Number of categories to extract, by default 3
+
+    Returns
+    -------
+    tuple[pd.Series, np.ndarray]
+        FB-EMA values, estimated labels (categories)
+    """
+    # FB filtering with EMA
+    f_ema = series.ewm(span=window).mean()
+    fb_ema = f_ema[::-1].ewm(span=window).mean()[::-1]
+
+    # Evaluate log-differences and fit the clustering model
+    log_diff = np.diff(np.log(fb_ema.values))
+    km = KMeans(n_clusters=n_categories, n_init="auto", random_state=42).fit(
+        log_diff.reshape(-1, 1)
+    )
+    lb = km.labels_
+
+    # Change the labels to get some semblance of order
+    cluster_centers = km.cluster_centers_.flatten()
+    temp = [(cluster_centers[i], i) for i in range(n_categories)]
+    temp = sorted(temp, key=lambda x: x[0])
+
+    labels = np.zeros(len(lb), dtype=int)
+    for i in range(1, n_categories):
+        old_lb = temp[i][1]
+        idx = np.where(lb == old_lb)[0]
+        labels[idx] = i
+
+    return fb_ema, labels
