@@ -121,15 +121,8 @@ def get_categories(
     f_ema = series.ewm(span=window).mean()
     fb_ema = f_ema[::-1].ewm(span=window).mean()[::-1]
 
-    zeroes = fb_ema.lt(0).sum() > 0
-
-    # Evaluate log-differences (with an offset in case of negative values)
-    if not zeroes:
-        log_diff = np.diff(np.log1p(fb_ema.values))
-    else:
-        log_diff = np.diff(np.log1p(fb_ema.values + abs(fb_ema.min())))
-
-    # Fit the clustering model
+    # Evaluate log-differences and fit the clustering model
+    log_diff = np.diff(np.log(fb_ema.values))
     km = KMeans(n_clusters=n_categories, n_init="auto", random_state=42).fit(
         log_diff.reshape(-1, 1)
     )
