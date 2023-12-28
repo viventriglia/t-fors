@@ -14,8 +14,9 @@ TODO consider f10.7 from the previous day
 Altri Feedback:
 - [x] imposta 350km di altitudine per SZA
 TODO Plot delle feature e del target entro una finestra di ±3h
-TODO Integrare SMR e HP_30
+- [x] Integrare SMR e HP_30
 - [x] Derivata prima categorizzata di IE --> k-means on FB-EMA
 - [x] Integra IL e IU con derivata prima categorizzata
-TODO variare la finestra di FB-EMA a 3-6 ore
-TODO medie mobili anche per IU
+- [x] variare la finestra di FB-EMA a 3-6 ore
+- [x] medie mobili anche per IU
+TODO fixare IL - IU -> IL + IU
