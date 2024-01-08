@@ -77,8 +77,8 @@ def objective(
         "iterations": trial.suggest_int("iterations", 100, 5_000),
         "learning_rate": trial.suggest_float("learning_rate", 0.0001, 0.1),
         "depth": trial.suggest_int("depth", 2, 10),
-        "od_wait": trial.suggest_int("od_wait", 100, 500),
         "min_data_in_leaf": trial.suggest_int("min_data_in_leaf", 1, 100),
+        "l2_leaf_reg": trial.suggest_float("l2_leaf_reg", 0.01, 10),
     }
     params.update(params_to_be_optimised)
 
