@@ -46,8 +46,12 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# Data (.csv files are heavy)
 data/in/*.csv
 data/out/*.csv
 
 # CatBoost model stuff
 jupyters/catboost_info/*
+
+# MLFlow stuff
+mlruns
