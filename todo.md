@@ -1,8 +1,8 @@
 TODO Decomposizione della serie temporale (STL, pyquant), oltre a (P)ACF
-TODO Profiling dei dati con stumpy?
+- [x] Matrix profiling con stumpy
 TODO Sperimentare con [Nixtla](https://www.nixtla.io/open-source) per il forecast e l'analisi della serie storica [esempio](https://nixtlaverse.nixtla.io/mlforecast/docs/getting-started/end_to_end_walkthrough.html)
 - [x] Individuare il metodo più appropriato per train-test split, evaluation metric ed eventuale stratificazione --> TimeSeriesSplit (sklearn) and [cross validation in Nixtla](https://nixtlaverse.nixtla.io/statsforecast/docs/tutorials/crossvalidation.html)
-TODO MLFlow per tracciare gli esperimenti di ML ([in congiunzione con Optuna](https://mlflow.org/docs/latest/traditional-ml/hyperparameter-tuning-with-child-runs/notebooks/hyperparameter-tuning-with-child-runs.html)); [API per CB](https://mlflow.org/docs/latest/python_api/mlflow.catboost.html)
+- [x] MLFlow per tracciare gli esperimenti di ML ([in congiunzione con Optuna](https://mlflow.org/docs/latest/traditional-ml/hyperparameter-tuning-with-child-runs/notebooks/hyperparameter-tuning-with-child-runs.html)); [API per CB](https://mlflow.org/docs/latest/python_api/mlflow.catboost.html)
 - [x] Tuning degli iperparametri [con Optuna](https://forecastegy.com/posts/catboost-hyperparameter-tuning-guide-with-optuna/); [altri parametri da provare a ottimizzare](https://catboost.ai/en/docs/concepts/parameter-tuning#l2-reg), esempi [dal repo di Optuna](https://github.com/optuna/optuna-examples/tree/main/catboost)
 TODO Calibrazione del classificatore! [sklearn doc](https://scikit-learn.org/stable/modules/calibration.html)
 TODO Confusion matrix
@@ -18,5 +18,5 @@ TODO Plot delle feature e del target entro una finestra di ±3h
 - [x] Derivata prima categorizzata di IE --> k-means on FB-EMA
 - [x] Integra IL e IU con derivata prima categorizzata
 - [x] variare la finestra di FB-EMA a 3-6 ore
-- [x] medie mobili anche per IU
-TODO fixare IL - IU -> IL + IU
+- TODO usare il flag qualità TID: inserire info nel modello, andando a flaggare (senza quindi eliminare) quegli eventi con qualità inferiore a una soglia X (0.3?). Tuttavia non è banale usare il flag nel modello, perché non ce lo avremo in tempo reale; quello che possiamo fare è: addestrare il modello su tutti gli eventi, ma poi mandarlo in predizione su soli eventi "puliti" (ossia la realtà)
+TODO post cross validazione, quale modello prendo?
