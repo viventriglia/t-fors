@@ -3755,6 +3755,25 @@ develop = ["colorama", "cython (>=0.29.26)", "cython (>=0.29.28,<3.0.0)", "flake
 docs = ["ipykernel", "jupyter-client", "matplotlib", "nbconvert", "nbformat", "numpydoc", "pandas-datareader", "sphinx"]
 
 [[package]]
+name = "stumpy"
+version = "1.12.0"
+description = "A powerful and scalable library that can be used for a variety of time series data mining tasks"
+optional = false
+python-versions = "*"
+files = [
+    {file = "stumpy-1.12.0-py3-none-any.whl", hash = "sha256:b404e47d5d12f39a0036d67edfa3190893d17d8988ab3be44915b7f6581eae69"},
+    {file = "stumpy-1.12.0.tar.gz", hash = "sha256:0390d077845f84a9b20893341499cf914e5a373eabf95d18ccf8971bbbc171b6"},
+]
+
+[package.dependencies]
+numba = ">=0.55.2"
+numpy = ">=1.18"
+scipy = ">=1.5"
+
+[package.extras]
+ci = ["black (>=22.1.0)", "coverage (>=4.5.3)", "dask (>=1.2.2)", "distributed (>=1.28.1)", "flake8 (>=3.7.7)", "flake8-docstrings (>=1.5.0)", "isort (>=5.11.0)", "pandas (>=0.20.0)", "pytest (>=4.4.1)"]
+
+[[package]]
 name = "tabulate"
 version = "0.9.0"
 description = "Pretty-print tabular data"
@@ -4131,4 +4150,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "98ca9421099cdda2f2c360110842f0e03eda48498511ff4657383cca3b2c7c1e"
+content-hash = "e2a72d4b7cd266a41397d5232fbf11d0c052e79a57b078568bff27465abd862b"
