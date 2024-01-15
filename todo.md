@@ -14,9 +14,8 @@ TODO consider f10.7 from the previous day
 Altri Feedback:
 - [x] imposta 350km di altitudine per SZA
 TODO Plot delle feature e del target entro una finestra di ±3h
-- [x] Integrare SMR e HP_30
-- [x] Derivata prima categorizzata di IE --> k-means on FB-EMA
-- [x] Integra IL e IU con derivata prima categorizzata
-- [x] variare la finestra di FB-EMA a 3-6 ore
 - TODO usare il flag qualità TID: inserire info nel modello, andando a flaggare (senza quindi eliminare) quegli eventi con qualità inferiore a una soglia X (0.3?). Tuttavia non è banale usare il flag nel modello, perché non ce lo avremo in tempo reale; quello che possiamo fare è: addestrare il modello su tutti gli eventi, ma poi mandarlo in predizione su soli eventi "puliti" (ossia la realtà)
-TODO post cross validazione, quale modello prendo?
+- TODO come scopriamo se c'è label noise? (hierarchical) clustering + tSNE?
+- TODO EDA multidimensionale per scoprire possibili pattern: https://facebookresearch.github.io/hiplot/
+- TODO voting fra modelli con diverse scale temporali? 3h - 5h
+- TODO sono più le volte che anticipiamo, posticipiamo o saltiamo la TID?
