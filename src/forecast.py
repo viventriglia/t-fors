@@ -100,6 +100,7 @@ def objective(
         "depth": trial.suggest_int("depth", 2, 10),
         "min_data_in_leaf": trial.suggest_int("min_data_in_leaf", 1, 100),
         "l2_leaf_reg": trial.suggest_float("l2_leaf_reg", 0.01, 10),
+        "scale_pos_weight": trial.suggest_float("scale_pos_weight", 1, 5),
     }
     params.update(params_to_be_optimised)
 
