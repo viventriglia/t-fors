@@ -35,21 +35,6 @@ def resample_time_series(
     return df.resample(time_interval, on=on_column).agg(aggregation_function)
 
 
-def log_transform(X: pd.DataFrame) -> pd.DataFrame:
-    """
-    Convenience function to apply a log transformation
-
-    Parameters
-    ----------
-    X : pd.DataFrame
-
-    Returns
-    -------
-    pd.DataFrame
-    """
-    return X.apply(np.log1p)
-
-
 def get_solar_position(
     time: pd.DatetimeIndex,
     columns: Literal[
