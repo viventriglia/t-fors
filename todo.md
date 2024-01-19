@@ -18,5 +18,5 @@ TODO Plot delle feature e del target entro una finestra di ±3h
 - TODO come scopriamo se c'è label noise? (hierarchical) clustering + tSNE?
 - TODO EDA multidimensionale per scoprire possibili pattern: https://facebookresearch.github.io/hiplot/
 - TODO voting fra modelli con diverse scale temporali? 3h - 6h - 12h
-- TODO sono più le volte che anticipiamo, posticipiamo o saltiamo la TID?
+- [x] [UMAP](https://umap-learn.readthedocs.io/en/latest/faq.html)
 - TODO move classification threshold; should we output (cailbrated) probabilities, then decide an "optimal" threshold?
