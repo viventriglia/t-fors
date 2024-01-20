@@ -11,7 +11,7 @@ From 1st Review Meeting:
 TODO consider f10.7 from the previous day
 - [x] rate of change in IL might be helpful (suggestion by Hermann Opgenoorth); we could consider a decomposition according to the first derivative of the geomagnetic indices
 
-Altri Feedback:
+Altro:
 - [x] imposta 350km di altitudine per SZA
 TODO Plot delle feature e del target entro una finestra di ±3h
 - TODO usare il flag qualità TID: inserire info nel modello, andando a flaggare (senza quindi eliminare) quegli eventi con qualità inferiore a una soglia X (0.3?). Tuttavia non è banale usare il flag nel modello, perché non ce lo avremo in tempo reale; quello che possiamo fare è: addestrare il modello su tutti gli eventi, ma poi mandarlo in predizione su soli eventi "puliti" (ossia la realtà)
@@ -19,4 +19,5 @@ TODO Plot delle feature e del target entro una finestra di ±3h
 - TODO EDA multidimensionale per scoprire possibili pattern: https://facebookresearch.github.io/hiplot/
 - TODO voting fra modelli con diverse scale temporali? 3h - 6h - 12h
 - [x] [UMAP](https://umap-learn.readthedocs.io/en/latest/faq.html)
+- TODO improvement of CatBoost hparams after new catalog: take inspiration from [here](https://www.kaggle.com/code/maiernator/exploration-of-baby-data-finetuned-catboost#Motivation-for-engineering-ILLB_R,ILOP_R,ILP_R)
 - TODO move classification threshold; should we output (cailbrated) probabilities, then decide an "optimal" threshold?
