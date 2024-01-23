@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, Union
 
 import pandas as pd
 import numpy as np
@@ -10,7 +10,9 @@ from src.var import LATITUDE, LONGITUDE, ALTITUDE
 
 def resample_time_series(
     df: pd.DataFrame,
-    aggregation_function: Literal["mean", "median", "max"],
+    aggregation_function: Union[
+        Literal["mean", "median", "max"], dict[str, Union[str, list[str]]]
+    ],
     time_interval: str = "30T",
     on_column: str = None,
 ) -> pd.DataFrame:
@@ -21,7 +23,7 @@ def resample_time_series(
     ----------
     df : pd.DataFrame
         DataFrame to be resampled
-    aggregation_function : Literal["mean", "median", "max"]
+    aggregation_function : Literal["mean", "median", "max"], dict[str, Union[str, list[str]]]
         Aggregation function to use
     time_interval : str, optional
         String format (according to https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior), by default "30T"
