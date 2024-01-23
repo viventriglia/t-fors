@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Literal, Union
 
 import pandas as pd
@@ -5,7 +6,8 @@ import numpy as np
 from sklearn.cluster import KMeans
 import pvlib
 
-from src.var import LATITUDE, LONGITUDE, ALTITUDE
+from src.io import read_time_series
+from src.var import LATITUDE, LONGITUDE, ALTITUDE, DATA_IN
 
 
 def resample_time_series(
@@ -134,3 +136,74 @@ def get_categories(
         labels[idx] = i
 
     return fb_ema, labels
+
+
+def preprocess_ionosonde_data(
+    station_name: str,
+    aggregation_function: Union[
+        Literal["mean", "median", "max"], dict[str, Union[str, list[str]]]
+    ],
+    resample_time_interval: str = "30T",
+) -> pd.DataFrame:
+    """
+    Convenience function that loads the specified ionosonde data, resamples it and applies some other standardisation transformations
+
+    Parameters
+    ----------
+    station_name : str
+        Name of the ionosonde, e.g. JR055
+    aggregation_function : Union[Literal["mean", "median", "max"], dict[str, Union[str, list[str]]]]
+        Aggregation function to use for resampling the original time series
+    resample_time_interval : str, optional
+        String format (according to https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior), by default "30T"
+
+    Returns
+    -------
+    pd.DataFrame
+    """
+    path = Path(DATA_IN, f"{station_name}.csv")
+    station_abbreviation = path.stem[:2].lower()
+
+    # Load raw ionosonde data
+    df_ionosonde = read_time_series(
+        path,
+        column_names=[
+            "spectral_contribution",
+            "velocity",
+            "azimuth",
+            "local_warning_level",
+            "datetime",
+        ],
+        usecols=[12, 13, 14, 15, 18],
+    )
+
+    # Resample the time series
+    df_ionosonde_30 = resample_time_series(
+        df=df_ionosonde,
+        aggregation_function=aggregation_function,
+        time_interval=resample_time_interval,
+    )
+
+    # Categorisation of the local warning level (TrL)
+    conds = [
+        df_ionosonde_30["local_warning_level"].eq(0),
+        df_ionosonde_30["local_warning_level"].eq(1),
+        df_ionosonde_30["local_warning_level"].eq(2),
+        df_ionosonde_30["local_warning_level"].eq(3),
+        df_ionosonde_30["local_warning_level"].eq(4),
+        df_ionosonde_30["local_warning_level"].eq(5),
+    ]
+    choices = ["no data", "quiet", "weak", "moderate", "strong", "very strong"]
+    df_ionosonde_30["local_warning_level"] = np.select(
+        condlist=conds, choicelist=choices, default="X"
+    )
+    df_ionosonde_30["local_warning_level"] = df_ionosonde_30[
+        "local_warning_level"
+    ].replace("X", np.nan)
+
+    # Adding suffixes to all columns
+    df_ionosonde_30.columns = [
+        col_ + f"_{station_abbreviation}" for col_ in df_ionosonde_30.columns
+    ]
+
+    return df_ionosonde_30
