@@ -197,9 +197,6 @@ def preprocess_ionosonde_data(
     df_ionosonde_30["local_warning_level"] = np.select(
         condlist=conds, choicelist=choices, default="X"
     )
-    df_ionosonde_30["local_warning_level"] = df_ionosonde_30[
-        "local_warning_level"
-    ].replace("X", np.nan)
 
     # Adding suffixes to all columns
     df_ionosonde_30.columns = [
