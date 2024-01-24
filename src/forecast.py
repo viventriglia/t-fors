@@ -6,6 +6,27 @@ from catboost import CatBoostClassifier
 from sklearn.metrics import f1_score
 from sklearn.model_selection import TimeSeriesSplit
 import optuna
+import mlflow
+
+
+def get_or_create_experiment(experiment_name: str) -> str:
+    """
+    Retrieves the ID of an existing MLflow experiment or creates a new one if it doesn't exist.
+
+    Parameters
+    ----------
+    experiment_name : str
+        Name of the MLflow experiment
+
+    Returns
+    -------
+    str
+        ID of the existing or newly created MLflow experiment
+    """
+    if experiment := mlflow.get_experiment_by_name(experiment_name):
+        return experiment.experiment_id
+    else:
+        return mlflow.create_experiment(experiment_name)
 
 
 def instantiate_and_fit_model(
@@ -79,6 +100,7 @@ def objective(
         "depth": trial.suggest_int("depth", 2, 10),
         "min_data_in_leaf": trial.suggest_int("min_data_in_leaf", 1, 100),
         "l2_leaf_reg": trial.suggest_float("l2_leaf_reg", 0.01, 10),
+        "scale_pos_weight": trial.suggest_float("scale_pos_weight", 1, 5),
     }
     params.update(params_to_be_optimised)
 
