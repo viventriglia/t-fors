@@ -86,37 +86,47 @@ def get_solar_position(
 
 
 def get_categories(
-    series: pd.Series, window: int = 20, n_categories: int = 3
+    series: pd.Series, window: int = 10, n_categories: int = 3, zero_phase: bool = True
 ) -> tuple[pd.Series, np.ndarray]:
     """
-    The function filters the time series with a forward-backward (FB) exponential moving average (EMA),
-    fits a K-Means clustering algorithm and returns FB-EMA values along with the estimated labels (categories)
+    Convenience function which filters the time series with a exponentially-weighted
+    moving average (EMA) or with a forward-backward (FB) EMA (if `zero_phase` is set
+    to True); the function then fits a K-Means algorithm and returns the smoothed
+    values along with the estimated labels (categories)
 
     Parameters
     ----------
     series : pd.Series
         Time series to filter and categorise
     window : int, optional
-        Time window for smoothing, by default 20
+        Time window steps for smoothing, by default 10
     n_categories : int, optional
         Number of categories to extract, by default 3
+    zero_phase : bool, optional
+        Whether or not to make the filter zero-phase (i.e., a non-causal filter),
+        by default True; if the filter is zero-phase, the smoothed series is not
+        appropriate for prediction due to data leakage from future values
 
     Returns
     -------
     tuple[pd.Series, np.ndarray]
-        FB-EMA values, estimated labels (categories)
+        Smoothed series, estimated labels (categories)
     """
-    # FB filtering with EMA
-    f_ema = series.ewm(span=window).mean()
-    fb_ema = f_ema[::-1].ewm(span=window).mean()[::-1]
+    filtered_series = series.ewm(span=window).mean()
 
-    zeroes = fb_ema.lt(0).sum() > 0
+    if zero_phase:
+        # Backward filtering as well
+        filtered_series = filtered_series[::-1].ewm(span=window).mean()[::-1]
+
+    zeroes = filtered_series.lt(0).sum() > 0
 
     # Evaluate log-differences (with an offset in case of negative values)
     if not zeroes:
-        log_diff = np.diff(np.log1p(fb_ema.values))
+        log_diff = np.diff(np.log1p(filtered_series.values))
     else:
-        log_diff = np.diff(np.log1p(fb_ema.values + abs(fb_ema.min())))
+        log_diff = np.diff(
+            np.log1p(filtered_series.values + abs(filtered_series.min()))
+        )
 
     # Fit the clustering model
     km = KMeans(n_clusters=n_categories, n_init="auto", random_state=42).fit(
@@ -135,7 +145,7 @@ def get_categories(
         idx = np.where(lb == old_lb)[0]
         labels[idx] = i
 
-    return fb_ema, labels
+    return filtered_series, labels
 
 
 def preprocess_ionosonde_data(
