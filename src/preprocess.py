@@ -187,6 +187,9 @@ def preprocess_ionosonde_data(
         usecols=[12, 13, 14, 15, 18],
     )
 
+    # Make the azimuth angle smooth
+    df_ionosonde["azimuth"] = np.sin(np.radians(df_ionosonde["azimuth"]))
+
     # Resample the time series
     df_ionosonde_30 = resample_time_series(
         df=df_ionosonde,
