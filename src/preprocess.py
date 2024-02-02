@@ -6,8 +6,8 @@ import numpy as np
 from sklearn.cluster import KMeans
 import pvlib
 
+from . import LATITUDE, LONGITUDE, ALTITUDE, DATA_IN
 from src.io import read_time_series
-from src.var import LATITUDE, LONGITUDE, ALTITUDE, DATA_IN
 
 
 def resample_time_series(
