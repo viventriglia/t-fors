@@ -55,3 +55,7 @@ jupyters/catboost_info/*
 
 # MLFlow stuff
 mlruns
+
+# Markdown
+*.md
+!README.md
