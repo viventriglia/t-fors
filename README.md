@@ -13,7 +13,7 @@ First, you need to install dependencies via [poetry](https://python-poetry.org/d
 If you are on Windows, to launch a web server and execute jupyter notebooks, you can run the `scripts/run-jupyter.ps1` script.
 Otherwise, you can activate the virtual environment manually and then execute the `poetry run jupyter notebook` command.
 
-[WIP] Launch the web app
+Launch the web app
 
 - `streamlit run 0_🏠_Home.py`
 
