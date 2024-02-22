@@ -31,4 +31,4 @@ st.markdown("### What do you care about?")
 col_l, col_r = st.columns(2)
 
 col_l.page_link("pages/1_📊_Data.py", label="**Show me the data**", icon="📊")
-col_r.page_link("pages/2_🔮_ML_model.py", label="**Give me predictions**", icon="🔮")
+col_r.page_link("pages/2_🔮_ML_model.py", label="**Show me the model**", icon="🔮")

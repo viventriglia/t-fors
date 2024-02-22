@@ -10,3 +10,5 @@ st.set_page_config(
 )
 
 st.markdown(GLOBAL_STREAMLIT_STYLE, unsafe_allow_html=True)
+
+st.warning("Page under construction, please come back later", icon="🚧")
