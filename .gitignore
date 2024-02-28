@@ -53,8 +53,19 @@ data/out/*.csv
 # CatBoost model stuff
 jupyters/catboost_info/*
 
-# MLFlow stuff
-mlruns
+# MLFlow stuff (commit only a specific model)
+# /mlruns/*
+# !mlruns/836438889763744696/bfb81fc4f057443eaa8aaf808d39951c/artifacts/model/model.cb
+mlruns/*
+!mlruns/836438889763744696
+mlruns/836438889763744696/*
+!mlruns/836438889763744696/bfb81fc4f057443eaa8aaf808d39951c/
+mlruns/836438889763744696/bfb81fc4f057443eaa8aaf808d39951c/*
+!mlruns/836438889763744696/bfb81fc4f057443eaa8aaf808d39951c/artifacts/
+mlruns/836438889763744696/bfb81fc4f057443eaa8aaf808d39951c/artifacts/*
+!mlruns/836438889763744696/bfb81fc4f057443eaa8aaf808d39951c/artifacts/model/
+mlruns/836438889763744696/bfb81fc4f057443eaa8aaf808d39951c/artifacts/model/*
+!mlruns/836438889763744696/bfb81fc4f057443eaa8aaf808d39951c/artifacts/model/model.cb
 
 # Markdown
 *.md
