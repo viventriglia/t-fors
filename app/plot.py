@@ -1,8 +1,8 @@
-from pathlib import Path
-
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import shap
+import streamlit.components.v1 as components
 
 from var import PLT_FONT_SIZE
 
@@ -56,3 +56,8 @@ def plot_features_and_target(
         ),
     )
     return fig
+
+
+def st_shap(plot, height: int = None) -> None:
+    shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"
+    components.html(shap_html, height=height)
