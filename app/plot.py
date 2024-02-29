@@ -15,7 +15,7 @@ def plot_features_and_target(
         "hf": "HF-EU index",
         "iu_mav_3h": "Auroral electrojet (IU index, 3h moving average)",
         "smr": "SMR (ring current)",
-        "true": "Ground truth (from catalogue)",
+        "true": "Target",
         "pred": "Model prediction",
     }
 
@@ -27,7 +27,7 @@ def plot_features_and_target(
         rows=n_cols,
         cols=1,
         shared_xaxes=True,
-        vertical_spacing=0.04,
+        vertical_spacing=0.07,
         subplot_titles=[*features_dict.values()],
     )
 
@@ -46,12 +46,11 @@ def plot_features_and_target(
 
     fig.update_layout(
         margin=dict(b=0),
-        template="plotly_white",
-        height=800,
-        width=1_000,
-        # hoverlabel_font_size=PLT_FONT_SIZE,
+        template="simple_white",
+        height=900,
+        hoverlabel_font_size=PLT_FONT_SIZE,
         title=dict(
-            text=f"<b>Features, target and model prediction, from {time_period[0].date()} to {time_period[-1].date()}</b>",
+            text=f"Features and target <i>vs</i> model prediction, from {time_period[0].date()} to {time_period[-1].date()}",
             font_size=PLT_FONT_SIZE + 4,
         ),
     )
@@ -59,5 +58,17 @@ def plot_features_and_target(
 
 
 def st_shap(plot, height: int = None) -> None:
-    shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"
+    shap_html = f"""
+    <head>
+        {shap.getjs()}
+        <style>
+            body {{
+                color: white !important;
+            }}
+        </style>
+    </head>
+    <body>{plot.html()}</body>
+    """
+
+    # shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"
     components.html(shap_html, height=height)
