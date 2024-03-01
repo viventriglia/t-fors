@@ -1,4 +1,6 @@
+import numpy as np
 import pandas as pd
+import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import shap
@@ -57,6 +59,44 @@ def plot_features_and_target(
     return fig
 
 
+def plot_umap(
+    umap_projections: np.ndarray,
+    y: np.ndarray,
+    n_comps: int,
+) -> go.Figure:
+    if n_comps == 3:
+        fig = px.scatter_3d(
+            x=umap_projections[:, 0],
+            y=umap_projections[:, 1],
+            z=umap_projections[:, 2],
+            color=y,
+            hover_name=y,
+        )
+        fig.update_traces(hovertemplate="Class <b>%{hovertext}</b><br>")
+        fig.update_layout(
+            margin=dict(t=0, b=0),
+            height=950,
+            template="plotly_dark",
+            coloraxis=dict(colorbar=dict(title="Class", dtick=1)),
+        )
+
+    elif n_comps == 2:
+        fig = px.scatter(
+            x=umap_projections[:, 0],
+            y=umap_projections[:, 1],
+            color=y,
+            hover_name=y,
+        )
+        fig.update_traces(hovertemplate="Class <b>%{hovertext}</b><br>")
+        fig.update_layout(
+            margin=dict(t=50, b=0),
+            height=950,
+            template="simple_white",
+            coloraxis=dict(colorbar=dict(title="Class", dtick=1)),
+        )
+    return fig
+
+
 def st_shap(plot, height: int = None) -> None:
     shap_html = f"""
     <head>
@@ -69,6 +109,4 @@ def st_shap(plot, height: int = None) -> None:
     </head>
     <body>{plot.html()}</body>
     """
-
-    # shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"
     components.html(shap_html, height=height)
