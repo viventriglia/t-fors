@@ -5,7 +5,8 @@ APP_VERSION = "0.1.1"
 
 # Data/images/model
 DATA_PATH = Path("..", "data", "out")
-FAVICON = Image.open(Path("..", "images", "favicon.png"))
+FAVICON_PATH = Path(Path(__file__).parents[1], "images", "favicon.png")
+FAVICON = Image.open(FAVICON_PATH)
 MODEL_PATH = Path(
     "..",
     "mlruns",
