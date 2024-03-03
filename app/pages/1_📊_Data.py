@@ -37,43 +37,45 @@ df_eval = pd.read_pickle(Path(DATA_PATH, "df_eval.pickle"))[all_features].fillna
 col_l, col_m, col_r = st.columns([1, 0.3, 0.8], gap="large")
 
 features = col_l.multiselect(
-    label="Choose the input features",
+    label="Input features",
     options=[ft_ for ft_ in all_features if ft_ != "true"],
     default=[ft_ for ft_ in all_features if ft_ not in ["true", "smr", "hp_30"]],
+    help="""
+    These are the features on which UMAP is fit; the list includes only the
+    most important features for the CatBoost model (*ML model* page). In general, more features
+    lead to a considerable increase in training time.
+    """,
 )
 
 X = df_eval[features]
 y = df_eval["true"]
 
 n_comps = col_m.radio(
-    label="Choose the dimensions", options=[2, 3], index=0, horizontal=True
+    label="Dimensions",
+    options=[2, 3],
+    index=0,
+    horizontal=True,
+    help="""
+    This controls the dimensionality of the reduced space we embed
+    the data into.
+    """,
 )
 
 n_neighbors = col_r.select_slider(
-    label="Choose the size of neighborhoods",
+    label="Size of neighborhoods",
     options=np.linspace(15, X.shape[0] // 10, num=5, dtype=int),
+    help="""
+    This determines how UMAP balances local versus global
+    structure in the data; it does so by constraining the size of the local neighborhood UMAP
+    looks at when attempting to learn the manifold structure of the data. Thus, lower values will
+    force UMAP to concentrate on the local structure (potentially to the detriment of the big
+    picture), while larger values will push it to look at larger neighborhoods of each point,
+    losing fine-detail structure for the sake of getting the broader picture of the data.
+    """,
 )
 
-with st.expander("Help, how do I choose those parameters?"):
-    st.markdown(
-        """
-- <i><b>Input features</b></i> are the features on which UMAP is fit; the list includes only the
-most important features for the CatBoost model (<i>ML model</i> page). In general, more features
-lead to a considerable increase in training time.
-- <i><b>Dimensions</b></i> controls the dimensionality of the reduced space we embed
-the data into.
-- <i><b>Size of neighborhoods</b></i> determines how UMAP balances local versus global
-structure in the data; it does so by constraining the size of the local neighborhood UMAP
-looks at when attempting to learn the manifold structure of the data. Thus, lower values will
-force UMAP to concentrate on the local structure (potentially to the detriment of the big
-picture), while larger values will push it to look at larger neighborhoods of each point,
-losing fine-detail structure for the sake of getting the broader picture of the data.
-""",
-        unsafe_allow_html=True,
-    )
-
-umap_projections = evaluate_umap(X=X, n_comps=n_comps, n_neighbors=n_neighbors)
-
-fig = plot_umap(umap_projections=umap_projections, y=y.values, n_comps=n_comps)
-
-st.plotly_chart(fig, use_container_width=True, config=PLT_CONFIG)
+if st.button("Go!"):
+    with st.spinner("Hold on..."):
+        umap_projections = evaluate_umap(X=X, n_comps=n_comps, n_neighbors=n_neighbors)
+        fig = plot_umap(umap_projections=umap_projections, y=y.values, n_comps=n_comps)
+        st.plotly_chart(fig, use_container_width=True, config=PLT_CONFIG)
