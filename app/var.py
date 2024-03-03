@@ -1,7 +1,7 @@
 from pathlib import Path
 from PIL import Image
 
-APP_VERSION = "0.1.1"
+APP_VERSION = "0.1.2"
 
 # Data/images/model
 DATA_PATH = Path(Path(__file__).parents[1], "data", "out")
