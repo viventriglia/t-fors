@@ -1,7 +1,7 @@
 from pathlib import Path
 from PIL import Image
 
-APP_VERSION = "0.1.2"
+APP_VERSION = "0.2.0"
 
 # Data/images/model
 DATA_PATH = Path(Path(__file__).parents[1], "data", "out")
@@ -11,7 +11,7 @@ MODEL_PATH = Path(
     Path(__file__).parents[1],
     "mlruns",
     "836438889763744696",
-    "bfb81fc4f057443eaa8aaf808d39951c",
+    "ed451d15e8094aa593f44d07bc77696d",
     "artifacts",
     "model",
     "model.cb",
