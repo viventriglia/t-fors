@@ -20,7 +20,7 @@ def get_shap_values(X: pd.DataFrame) -> tuple[shap.TreeExplainer, np.ndarray]:
     return explainer, shap_vals
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, max_entries=2)
 def evaluate_umap(X: pd.DataFrame, n_comps: int, n_neighbors: int) -> np.ndarray:
     X_sc = MinMaxScaler().fit_transform(X.values)
 
