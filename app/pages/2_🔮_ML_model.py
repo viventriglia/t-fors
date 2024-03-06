@@ -7,7 +7,14 @@ import shap
 
 from plot import plot_features_and_target, st_shap
 from model import get_shap_values
-from var import FAVICON, GLOBAL_STREAMLIT_STYLE, DATA_PATH, PLT_CONFIG_NO_LOGO
+from var import (
+    FAVICON,
+    GLOBAL_STREAMLIT_STYLE,
+    DATA_PATH,
+    PLT_CONFIG_NO_LOGO,
+    VAR_NAMES_DICT,
+    VAR_NAMES_INVERSE_DICT,
+)
 
 st.set_page_config(
     page_title="T-FORS AI @ INGV | ML model",
@@ -31,23 +38,51 @@ start_date, end_date = (
 
 st.markdown("### Main features and target variable *vs* model output")
 
+col_l, col_r = st.columns(2)
+
+all_outputs = ["true", "pred", "pred_proba", "pred_f1_max", "pred_p_80", "pred_r_60"]
+unwanted_features = [
+    *[col_ for col_ in df_eval.columns if col_.startswith("local_warning_")],
+]
+all_features = [
+    ft_
+    for ft_ in df_eval.columns
+    if ft_ not in all_outputs and ft_ not in unwanted_features
+]
+
+features = col_l.multiselect(
+    label="Input features",
+    options=[VAR_NAMES_DICT[ft_] for ft_ in all_features],
+    default=[VAR_NAMES_DICT[ft_] for ft_ in ["hf", "iu_fix", "smr"]],
+    max_selections=5,
+)
+features = [VAR_NAMES_INVERSE_DICT[ft_] for ft_ in features]
+
+outputs = col_r.multiselect(
+    label="Model outputs",
+    options=[VAR_NAMES_DICT[op_] for op_ in all_outputs if op_ != "true"],
+    default=[VAR_NAMES_DICT[op_] for op_ in ["pred_f1_max", "pred_p_80"]],
+)
+outputs = [VAR_NAMES_INVERSE_DICT[op_] for op_ in outputs]
+
+plot_cols = ["true"] + outputs + features
+df_plt = df_eval[plot_cols]
+
 first_day, last_day = st.select_slider(
     "Chose the period to display",
-    options=df_eval.index,
+    options=df_plt.index,
     value=[start_date, end_date],
     format_func=lambda value: str(value)[:10],
 )
 
-fig = plot_features_and_target(df=df_eval, time_period=[first_day, last_day])
+fig = plot_features_and_target(df=df_plt, time_period=[first_day, last_day])
 st.plotly_chart(fig, use_container_width=True, config=PLT_CONFIG_NO_LOGO)
 
 st.markdown("***")
 
 st.markdown("### Event-level explanation (SHAP)")
 
-feature_cols = [
-    col_ for col_ in df_eval.columns if col_ not in ["true", "pred", "pred_pr"]
-]
+feature_cols = [col_ for col_ in df_eval.columns if col_ not in all_outputs]
 
 explainer, shap_vals = get_shap_values(X=df_eval[feature_cols])
 
@@ -73,7 +108,7 @@ st_shap(
     shap.force_plot(
         explainer.expected_value,
         shap_vals[row, :],
-        df_eval.iloc[row, :-3],
+        df_eval[feature_cols].iloc[row],
         link="logit",
         feature_names=[
             " ".join(
@@ -86,17 +121,3 @@ st_shap(
         ],
     ),
 )
-
-# st.pyplot(
-#     shap.force_plot(
-#         explainer.expected_value,
-#         shap_vals[row, :],
-#         df_eval.iloc[row, :-3],
-#         link="logit",
-#         show=False,
-#         matplotlib=True,
-#     ),
-#     # bbox_inches="tight",
-#     dpi=400,
-#     pad_inches=0,
-# )
