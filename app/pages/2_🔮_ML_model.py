@@ -6,7 +6,7 @@ import pandas as pd
 import shap
 
 from plot import plot_features_and_target, st_shap
-from model import get_shap_values
+from model import get_shap_values, list_features_by_importance
 from var import (
     FAVICON,
     GLOBAL_STREAMLIT_STYLE,
@@ -46,12 +46,12 @@ unwanted_features = [
 ]
 all_features = [
     ft_
-    for ft_ in df_eval.columns
+    for ft_ in list_features_by_importance()
     if ft_ not in all_outputs and ft_ not in unwanted_features
 ]
 
 features = col_l.multiselect(
-    label="Input features",
+    label="Input features (ordered by importance)",
     options=[VAR_NAMES_DICT[ft_] for ft_ in all_features],
     default=[VAR_NAMES_DICT[ft_] for ft_ in ["hf", "iu_fix", "smr"]],
     max_selections=5,
