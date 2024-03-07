@@ -51,7 +51,7 @@ VAR_NAMES_DICT = {
     "ie_mav_6h": "Auroral electrojet (IE index, 6h moving average)",
     "ie_mav_12h": "Auroral electrojet (IE index, 12h moving average)",
     "ie_mav_24h": "Auroral electrojet (IE index, 24h moving average)",
-    "iu_fix": "Auroral electrojet (IE index)",
+    "iu_fix": "Auroral electrojet (IU index)",
     "iu_variation": "Auroral electrojet (IU index variation)",
     "iu_mav_3h": "Auroral electrojet (IU index, 3h moving average)",
     "iu_mav_6h": "Auroral electrojet (IU index, 6h moving average)",
