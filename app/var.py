@@ -1,12 +1,15 @@
 from pathlib import Path
 from PIL import Image
 
-APP_VERSION = "0.2.0"
+APP_VERSION = "0.2.1"
 
 # Data/images/model
 DATA_PATH = Path(Path(__file__).parents[1], "data", "out")
-FAVICON_PATH = Path(Path(__file__).parents[1], "images", "favicon.png")
-FAVICON = Image.open(FAVICON_PATH)
+IMAGES_PATH = Path(Path(__file__).parents[1], "images", "app")
+FAVICON = Image.open(Path(IMAGES_PATH, "favicon.png"))
+LOGO = Image.open(Path(IMAGES_PATH, "logo.png"))
+EU_LOGO_NEG = Image.open(Path(IMAGES_PATH, "funded_by_the_EU_RGB_neg.png"))
+EU_LOGO_WHT = Image.open(Path(IMAGES_PATH, "funded_by_the_EU_RGB_white_outline.png"))
 MODEL_PATH = Path(
     Path(__file__).parents[1],
     "mlruns",

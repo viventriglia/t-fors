@@ -1,6 +1,12 @@
 import streamlit as st
 
-from var import FAVICON, APP_VERSION, GLOBAL_STREAMLIT_STYLE
+from var import (
+    FAVICON,
+    LOGO,
+    EU_LOGO_NEG,
+    APP_VERSION,
+    GLOBAL_STREAMLIT_STYLE,
+)
 
 st.set_page_config(
     page_title="T-FORS AI @ INGV | Home",
@@ -24,11 +30,33 @@ st.markdown(
     **forecast** the occurrence and propagation of LSTIDs."
 )
 
+hide_img_fs = """
+<style>
+button[title="View fullscreen"]{
+    visibility: hidden;}
+</style>
+"""
+st.markdown(hide_img_fs, unsafe_allow_html=True)
+
+col_l, col_m_l, col_m_r, col_r = st.columns([1, 0.9, 0.9, 1])
+col_m_l.image(LOGO, width=200)
+col_m_r.image(EU_LOGO_NEG, width=250)
+
 st.markdown("***")
 
-st.markdown("### What do you care about?")
+st.markdown("### What can I find here?")
 
-col_l, col_r = st.columns(2)
+st.markdown(
+    "<i>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    unsafe_allow_html=True,
+)
+st.page_link("pages/1_📊_Data.py", label="**Show me the data**", icon="📊")
 
-col_l.page_link("pages/1_📊_Data.py", label="**Show me the data**", icon="📊")
-col_r.page_link("pages/2_🔮_ML_model.py", label="**Show me the model**", icon="🔮")
+st.markdown(
+    "<i>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    unsafe_allow_html=True,
+)
+st.page_link("pages/2_🔮_ML_model.py", label="**Show me the model**", icon="🔮")
+
+with st.expander("Model features"):
+    st.write("AO nun ce sta ancora niente, passa più tardi")
