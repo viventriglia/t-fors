@@ -86,11 +86,11 @@ VAR_NAMES_DICT = {
     "velocity_ro": "Velocity (Rome)",
     "velocity_vt": "Velocity (San Vito)",
     "true": "Target",
-    "pred": "Model prediction (vanilla)",
-    "pred_proba": "Model prediction (class score)",
-    "pred_f1_max": "Model prediction (max F1-score)",
-    "pred_p_80": "Model prediction (precision 0.8)",
-    "pred_r_60": "Model prediction (recall 0.6)",
+    "pred": "Vanilla prediction",
+    "pred_proba": "Class score",
+    "pred_f1_max": "Max F1-score prediction",
+    "pred_p_80": "High-precision prediction",
+    "pred_r_60": "High-recall prediction",
 }
 
 VAR_NAMES_INVERSE_DICT = {v: k for k, v in VAR_NAMES_DICT.items()}

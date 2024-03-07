@@ -61,7 +61,7 @@ features = [VAR_NAMES_INVERSE_DICT[ft_] for ft_ in features]
 outputs = col_r.multiselect(
     label="Model outputs",
     options=[VAR_NAMES_DICT[op_] for op_ in all_outputs if op_ != "true"],
-    default=[VAR_NAMES_DICT[op_] for op_ in ["pred_f1_max", "pred_p_80"]],
+    default=[VAR_NAMES_DICT[op_] for op_ in ["pred_p_80", "pred_f1_max"]],
 )
 outputs = [VAR_NAMES_INVERSE_DICT[op_] for op_ in outputs]
 
