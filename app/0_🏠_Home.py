@@ -63,10 +63,19 @@ st.markdown(
 st.page_link("pages/1_📊_Data.py", label="**Show me the data**", icon="📊")
 
 st.markdown(
-    "<i>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    """
+    The developed model comes from an efficient, fast and scalable gradient-boosting on decision
+    trees framework (<b>[CatBoost](https://catboost.ai/)</b>). Our problem can be framed as a
+    <b>multivariate time-series binary classification</b>, with:
+    - 40+ time series as <b>input</b>;
+    - a binary classification as <b>output</b> (a LSTID event is starting or not within 3 hours).
+
+    An <b>explanatory</b> framework (<b>[SHAP](https://shap.readthedocs.io/en/latest/)</b>) is then
+    employed to test features influence on the model output from an <b>event-level</b> perspective.
+    """,
     unsafe_allow_html=True,
 )
 st.page_link("pages/2_🔮_ML_model.py", label="**Show me the model**", icon="🔮")
 
-with st.expander("Model features"):
-    st.write("AO nun ce sta ancora niente, passa più tardi")
+with st.expander("Complete list of features"):
+    st.warning(icon="🚧", body="Coming soon!")
