@@ -31,9 +31,10 @@ st.markdown("***")
 st.markdown("### Dimensionality reduction with UMAP")
 
 all_features = [
-    "iu_mav_6h",
     "hf",
     "solar_zenith_angle",
+    "iu_mav_6h",
+    "f_107_adj",
     "hp_30",
     "smr",
     "true",
@@ -41,7 +42,7 @@ all_features = [
 
 df_eval = pd.read_pickle(Path(DATA_PATH, "df_eval.pickle"))[all_features].fillna(0)
 
-col_l, col_m, col_r = st.columns([1, 0.3, 0.8], gap="large")
+col_l, col_m, col_r = st.columns([1, 0.25, 0.7], gap="large")
 
 features = col_l.multiselect(
     label="Input features",
@@ -49,8 +50,9 @@ features = col_l.multiselect(
     default=[
         VAR_NAMES_DICT[ft_]
         for ft_ in all_features
-        if ft_ not in ["true", "smr", "hp_30"]
+        if ft_ not in ["true", "f_107_adj", "smr", "hp_30"]
     ],
+    max_selections=5,
     help="""
     These are the features on which UMAP is fit; the list includes only the
     most important features for the CatBoost model (*ML model* page). In general, more features
@@ -75,7 +77,7 @@ n_comps = col_m.radio(
 
 n_neighbors = col_r.select_slider(
     label="Size of neighborhoods",
-    options=np.linspace(15, X.shape[0] // 10, num=5, dtype=int),
+    options=np.linspace(15, X.shape[0] // 20, num=6, dtype=int),
     help="""
     This determines how UMAP balances local versus global
     structure in the data; it does so by constraining the size of the local neighborhood UMAP
@@ -87,7 +89,9 @@ n_neighbors = col_r.select_slider(
 )
 
 if st.button("Go!"):
-    with st.spinner("Hold on..."):
+    with st.spinner(
+        "Hold on: the computation is very expensive and done on the fly using free cloud resources"
+    ):
         umap_projections = evaluate_umap(X=X, n_comps=n_comps, n_neighbors=n_neighbors)
         fig = plot_umap(umap_projections=umap_projections, y=y.values, n_comps=n_comps)
         st.plotly_chart(fig, use_container_width=True, config=PLT_CONFIG)
