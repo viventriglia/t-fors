@@ -6,31 +6,23 @@ from plotly.subplots import make_subplots
 import shap
 import streamlit.components.v1 as components
 
-from var import PLT_FONT_SIZE
+from var import PLT_FONT_SIZE, VAR_NAMES_DICT
 
 
 def plot_features_and_target(
     df: pd.DataFrame,
     time_period: list,
 ) -> go.Figure:
-    features_dict = {
-        "hf": "HF-EU index",
-        "iu_mav_3h": "Auroral electrojet (IU index, 3h moving average)",
-        "smr": "SMR (ring current)",
-        "true": "Target",
-        "pred": "Model prediction",
-    }
 
-    df_plt = df.loc[f"{time_period[0]}":f"{time_period[-1]}", features_dict.keys()]
-
-    n_cols = len(features_dict.keys())
+    df_plt = df.loc[f"{time_period[0]}":f"{time_period[-1]}"]
+    n_cols = df_plt.shape[1]
 
     fig = make_subplots(
         rows=n_cols,
         cols=1,
         shared_xaxes=True,
         vertical_spacing=0.07,
-        subplot_titles=[*features_dict.values()],
+        subplot_titles=[VAR_NAMES_DICT[col_] for col_ in df_plt.columns],
     )
 
     for i, col in enumerate(df_plt.columns, start=1):
@@ -38,7 +30,6 @@ def plot_features_and_target(
             go.Scatter(
                 x=df_plt[col].index,
                 y=df_plt[col].values,
-                name=features_dict[col],
                 showlegend=False,
             ),
             row=i,

@@ -6,7 +6,14 @@ import pandas as pd
 
 from model import evaluate_umap
 from plot import plot_umap
-from var import FAVICON, DATA_PATH, GLOBAL_STREAMLIT_STYLE, PLT_CONFIG
+from var import (
+    FAVICON,
+    DATA_PATH,
+    GLOBAL_STREAMLIT_STYLE,
+    PLT_CONFIG,
+    VAR_NAMES_DICT,
+    VAR_NAMES_INVERSE_DICT,
+)
 
 st.set_page_config(
     page_title="T-FORS AI @ INGV | Data",
@@ -17,7 +24,7 @@ st.set_page_config(
 
 st.markdown(GLOBAL_STREAMLIT_STYLE, unsafe_allow_html=True)
 
-st.markdown("# Data wrangling")
+st.markdown("# Data mining")
 
 st.markdown("***")
 
@@ -38,14 +45,19 @@ col_l, col_m, col_r = st.columns([1, 0.3, 0.8], gap="large")
 
 features = col_l.multiselect(
     label="Input features",
-    options=[ft_ for ft_ in all_features if ft_ != "true"],
-    default=[ft_ for ft_ in all_features if ft_ not in ["true", "smr", "hp_30"]],
+    options=[VAR_NAMES_DICT[ft_] for ft_ in all_features if ft_ != "true"],
+    default=[
+        VAR_NAMES_DICT[ft_]
+        for ft_ in all_features
+        if ft_ not in ["true", "smr", "hp_30"]
+    ],
     help="""
     These are the features on which UMAP is fit; the list includes only the
     most important features for the CatBoost model (*ML model* page). In general, more features
     lead to a considerable increase in training time.
     """,
 )
+features = [VAR_NAMES_INVERSE_DICT[ft_] for ft_ in features]
 
 X = df_eval[features]
 y = df_eval["true"]
