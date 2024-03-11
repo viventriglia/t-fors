@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 
 from var import (
     FAVICON,
@@ -6,6 +7,8 @@ from var import (
     EU_LOGO_NEG,
     APP_VERSION,
     GLOBAL_STREAMLIT_STYLE,
+    FEAT_NAMES_DICT,
+    OUTP_NAMES_DICT,
 )
 
 st.set_page_config(
@@ -51,7 +54,7 @@ st.markdown("### What can I find here?")
 
 st.markdown(
     """
-    The analysed data range from geomagnetic indicators to sensor data from ionosondes
+    The analysed data range from geomagnetic indices to sensor data from ionosondes
     scattered across the European continent. To get an intuition of the complexity behind our task,
     it may be informative to consider a low-dimensionality representation of the dataset.
     On the first page, you can find a representation of the data according to the <i>Uniform
@@ -71,11 +74,18 @@ st.markdown(
     - a binary classification as <b>output</b> (a LSTID event is starting or not within 3 hours).
 
     An <b>explanatory</b> framework (<b>[SHAP](https://shap.readthedocs.io/en/latest/)</b>) is then
-    employed to test features influence on the model output from an <b>event-level</b> perspective.
+    employed to test features' influence on the model output from an <b>event-level</b> perspective.
     """,
     unsafe_allow_html=True,
 )
 st.page_link("pages/2_🔮_ML_model.py", label="**Show me the model**", icon="🔮")
 
-with st.expander("Complete list of features"):
-    st.warning(icon="🚧", body="Coming soon!")
+with st.expander("Complete list of features and outputs"):
+    st.markdown("**Model input**")
+    st.table(
+        pd.DataFrame.from_dict(FEAT_NAMES_DICT, orient="index", columns=["Description"])
+    )
+    st.markdown("**Model output**")
+    st.table(
+        pd.DataFrame.from_dict(OUTP_NAMES_DICT, orient="index", columns=["Description"])
+    )
