@@ -4444,6 +4444,21 @@ tooling = ["black (>=23.7.0)", "pyright (>=1.1.325)", "ruff (>=0.0.287)"]
 tooling-extras = ["pyaml (>=23.7.0)", "pypandoc-binary (>=1.11)", "pytest (>=7.4.0)"]
 
 [[package]]
+name = "venn-abers"
+version = "1.4.1"
+description = "Venn-ABERS calibration package"
+optional = false
+python-versions = "*"
+files = [
+    {file = "venn-abers-1.4.1.tar.gz", hash = "sha256:f091c994948dace6e800dc4e072c3e2b74f3e015c644702fbdabc597bebc3788"},
+]
+
+[package.dependencies]
+numpy = "*"
+pandas = "*"
+scikit-learn = "*"
+
+[[package]]
 name = "waitress"
 version = "2.1.2"
 description = "Waitress WSGI server"
@@ -4598,4 +4613,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "bdde85a10ce2acb987045002f67d6dd369f530dae53a64771655845dbbdd1d16"
+content-hash = "8991cb166f6741142d4224b013c222455d7d2b155e05a9a668b2d7144eb1edde"

@@ -31,6 +31,7 @@ keras = "^3.0.4"
 torch = "^2.2.0"
 setuptools = "^69.1.0"
 streamlit = "^1.31.1"
+venn-abers = "^1.4.1"
 
 
 [tool.poetry.group.dev.dependencies]
