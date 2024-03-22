@@ -640,6 +640,21 @@ test = ["Pillow", "contourpy[test-no-images]", "matplotlib"]
 test-no-images = ["pytest", "pytest-cov", "pytest-xdist", "wurlitzer"]
 
 [[package]]
+name = "crepes"
+version = "0.6.2"
+description = "Conformal classifiers, regressors, and predictive systems (crepes)"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "crepes-0.6.2-py3-none-any.whl", hash = "sha256:a3e8e3e01bee9ac7b5e66bebe377829734f235e22be98e80644fd2dba5660e5b"},
+    {file = "crepes-0.6.2.tar.gz", hash = "sha256:184a1819cb830cc0f66548513d881c59d5113f7ba6e14decd7fbfe0ed0d8a89a"},
+]
+
+[package.dependencies]
+numpy = "*"
+pandas = "*"
+
+[[package]]
 name = "cycler"
 version = "0.12.1"
 description = "Composable style cycles"
@@ -4613,4 +4628,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "8991cb166f6741142d4224b013c222455d7d2b155e05a9a668b2d7144eb1edde"
+content-hash = "549dc74c19989b375a518be3264525c8763aa9f77b23ad26d0ab93eaab8b68ec"

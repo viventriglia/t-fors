@@ -32,6 +32,7 @@ torch = "^2.2.0"
 setuptools = "^69.1.0"
 streamlit = "^1.31.1"
 venn-abers = "^1.4.1"
+crepes = "^0.6.2"
 
 
 [tool.poetry.group.dev.dependencies]
