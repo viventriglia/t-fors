@@ -70,7 +70,7 @@ st.markdown(
     The developed model comes from an efficient, fast and scalable gradient-boosting on decision
     trees framework (<b>[CatBoost](https://catboost.ai/)</b>). Our problem can be framed as a
     <b>multivariate time-series binary classification</b>, with:
-    - 40+ time series as <b>input</b>;
+    - 36 time series as <b>input</b>;
     - a binary classification as <b>output</b> (a LSTID event is starting or not within 3 hours).
 
     An <b>explanatory</b> framework (<b>[SHAP](https://shap.readthedocs.io/en/latest/)</b>) is then

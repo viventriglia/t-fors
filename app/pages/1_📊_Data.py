@@ -33,7 +33,7 @@ st.markdown("### Dimensionality reduction with UMAP")
 all_features = [
     "hf",
     "solar_zenith_angle",
-    "iu_mav_6h",
+    "iu_mav_3h",
     "f_107_adj",
     "hp_30",
     "smr",
