@@ -91,12 +91,11 @@ VAR_NAMES_DICT = {
     "velocity_pq": "Velocity (Průhonice)",
     "velocity_ro": "Velocity (Rome)",
     "velocity_vt": "Velocity (San Vito)",
-    "true": "Target",
-    # "pred": "Vanilla prediction",
+    "true": "Target (derived from TechTIDE catalogue)",
     "pred_proba": "Class score",
     "pred_f1_max": "Balanced prediction",
     "pred_p_80": "High-precision prediction",
-    "pred_r_60": "High-recall prediction",
+    "pred_r_60": "High-sensitivity prediction",
 }
 VAR_NAMES_INVERSE_DICT = {v: k for k, v in VAR_NAMES_DICT.items()}
 FEAT_NAMES_DICT = {
@@ -124,7 +123,6 @@ FEAT_NAMES_DICT = {
 OUTP_NAMES_DICT = {
     "Target": "Discrete variable, derived from the LSTID catalogue; it is 1 if there is an LSTID event within 3 hours, 0 otherwise",
     "Class score": "Soft classification gives scores, where a higher score for that class means the model is more confident in its prediction; this score is related to the probability of an observation belonging to, say, the positive class (LSTID occurs)",
-    # "Vanilla prediction": "Binary output of the model with decision threshold set to the “standard” value of 0.50 (cross-validated F1-score: 0.54)",
     "Balanced prediction": "Binary output of the model with decision threshold set to 0.68 (mean cross-validated F1-score: 0.56)",
     "High-precision prediction": "Binary output of the model with decision threshold set to 0.85 (mean cross-validated F1-score: 0.50), in order to achieve 80%-level precision",
     "High-sensitivity prediction": "Binary output of the model with decision threshold set to 0.54 (mean cross-validated F1-score: 0.55), in order to achieve 60%-level recall",
