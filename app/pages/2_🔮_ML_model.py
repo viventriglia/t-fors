@@ -36,19 +36,12 @@ start_date, end_date = (
     df_eval.loc["2022-04-15"].index.max(),
 )
 
-st.markdown("### Main features and target variable *vs* model output")
+st.markdown("### Features and target variable *vs* model output")
 
 col_l, col_r = st.columns(2)
 
-all_outputs = ["true", "pred", "pred_proba", "pred_f1_max", "pred_p_80", "pred_r_60"]
-unwanted_features = [
-    *[col_ for col_ in df_eval.columns if col_.startswith("local_warning_")],
-]
-all_features = [
-    ft_
-    for ft_ in list_features_by_importance()
-    if ft_ not in all_outputs and ft_ not in unwanted_features
-]
+all_outputs = ["true", "pred_proba", "pred_f1_max", "pred_p_80", "pred_r_60"]
+all_features = [ft_ for ft_ in list_features_by_importance() if ft_ not in all_outputs]
 
 features = col_l.multiselect(
     label="Input features (ordered by importance)",

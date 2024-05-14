@@ -39,7 +39,7 @@ def objective(
     params_to_be_optimised = {
         "iterations": trial.suggest_int("iterations", 100, 5_000),
         "learning_rate": trial.suggest_float("learning_rate", 0.0001, 0.1),
-        "depth": trial.suggest_int("depth", 2, 10),
+        "depth": trial.suggest_int("depth", 2, 9),
         "min_data_in_leaf": trial.suggest_int("min_data_in_leaf", 1, 100),
         "l2_leaf_reg": trial.suggest_float("l2_leaf_reg", 0.01, 10),
         "scale_pos_weight": trial.suggest_float("scale_pos_weight", 1, 5),
