@@ -6,3 +6,8 @@ TODO Decomposizione della serie temporale (STL, pyquant), oltre a (P)ACF
 TODO CatBoost doc: https://catboost.ai/en/docs/concepts/python-reference_catboostclassifier_fit (look for incremental) --> va nella direzione dell'incremental learning (od online learning)
 "Data assimilation combines observations and models in a way that accounts for the uncertainties in each, while simultaneously respecting certain constraints.  These include the laws of motion of the system through the model equations, and how the measurements physically relate to the system’s variables.  In weather forecasting, recent weather observations are combined with today’s model forecast to obtain a complete picture of the atmosphere now in order to start a new forecast for the days ahead.  Data assimilation is often thought of as a way of keeping a model ‘on the tracks’ by constantly correcting it with fresh observations." (https://research.reading.ac.uk/met-darc/aboutus/what-is-data-assimilation/)
 --> prototipo per il progetto --> piano possibile d'implementazione verso un prodotto da includere in servizi e portali di space weather, come quello ESA --> idee di sviluppo per future prosecuzione del progetto
+
+Ebro
+L1 parameters, substitute 10_000 with NaN values
+use non projected features, but at L1
+discussione su data/concept drift --> 2024 HF index not reliable
