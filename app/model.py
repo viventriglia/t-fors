@@ -11,6 +11,7 @@ import umap
 from var import MODEL_PATH, DATA_PATH
 
 
+@st.cache_resource(show_spinner=False, max_entries=1)
 def load_model() -> CatBoostClassifier:
     return CatBoostClassifier().load_model(MODEL_PATH)
 
@@ -23,7 +24,6 @@ def get_shap_values(X: pd.DataFrame) -> tuple[shap.TreeExplainer, np.ndarray]:
     return explainer, shap_vals
 
 
-@st.cache_data(show_spinner=False, max_entries=1)
 def list_features_by_importance() -> list:
     return pd.read_pickle(Path(DATA_PATH, "df_feat_imp.pickle"))["feature"].to_list()
 
