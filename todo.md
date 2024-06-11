@@ -11,3 +11,6 @@ Ebro
 L1 parameters, substitute 10_000 with NaN values
 use non projected features, but at L1
 discussione su data/concept drift --> 2024 HF index not reliable
+
+URSI
+PINN loss --> https://github.com/catboost/catboost/blob/master/catboost/tutorials/custom_loss/custom_loss_and_metric_tutorial.ipynb
