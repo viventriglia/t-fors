@@ -6,7 +6,7 @@ from plotly.subplots import make_subplots
 import shap
 import streamlit.components.v1 as components
 
-from var import PLT_FONT_SIZE, VAR_NAMES_DICT
+from var import PLT_FONT_SIZE, VAR_NAMES_DICT, VAR_UOM_DICT
 
 
 def plot_features_and_target(
@@ -21,7 +21,7 @@ def plot_features_and_target(
         rows=n_cols,
         cols=1,
         shared_xaxes=True,
-        vertical_spacing=0.07,
+        vertical_spacing=0.069,
         subplot_titles=[VAR_NAMES_DICT[col_] for col_ in df_plt.columns],
     )
 
@@ -36,17 +36,35 @@ def plot_features_and_target(
             col=1,
         )
         fig.update_traces(hovertemplate="<b>%{y:,.1f}</b> <extra>%{x}</extra>")
+        # Write unit of measure, if any
+        if col in VAR_UOM_DICT.keys():
+            fig.update_yaxes(title_text=VAR_UOM_DICT[col], row=i, col=1)
+
+    for annotation in fig["layout"]["annotations"]:
+        annotation["font"] = dict(size=PLT_FONT_SIZE + 2)
 
     fig.update_layout(
-        margin=dict(b=0),
+        margin=dict(b=0, t=30),
+        # margin=dict(b=0),
         template="simple_white",
         height=900,
         hoverlabel_font_size=PLT_FONT_SIZE,
-        title=dict(
-            text=f"Features and target <i>vs</i> model prediction, from {time_period[0].date()} to {time_period[-1].date()}",
-            font_size=PLT_FONT_SIZE + 4,
-        ),
+        # title=dict(
+        #     text=f"Features and target <i>vs</i> model prediction, from {time_period[0].date()} to {time_period[-1].date()}",
+        #     font_size=PLT_FONT_SIZE + 6,
+        # ),
+        font_color="black",
     )
+    fig.update_yaxes(
+        tickfont=dict(size=PLT_FONT_SIZE, color="black"),
+        tickcolor="black",
+        tickmode="auto",
+        nticks=4,
+    )
+    fig.update_xaxes(
+        tickfont=dict(size=PLT_FONT_SIZE, color="black"), tickcolor="black"
+    )
+
     return fig
 
 

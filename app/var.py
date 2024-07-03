@@ -41,38 +41,28 @@ PLT_CONFIG = {
 }
 PLT_CONFIG_NO_LOGO = {"displaylogo": False}
 CACHE_EXPIRE_SECONDS = 600
-PLT_FONT_SIZE = 16
+PLT_FONT_SIZE = 18
 
 # Human-readable variable names
 VAR_NAMES_DICT = {
     "ie_fix": "Auroral electrojet (IE index)",
     "ie_variation": "Auroral electrojet (IE index variation)",
     "ie_mav_3h": "Auroral electrojet (IE index, 3h moving average)",
-    # "ie_mav_6h": "Auroral electrojet (IE index, 6h moving average)",
     "ie_mav_12h": "Auroral electrojet (IE index, 12h moving average)",
-    # "ie_mav_24h": "Auroral electrojet (IE index, 24h moving average)",
     "iu_fix": "Auroral electrojet (IU index)",
     "iu_variation": "Auroral electrojet (IU index variation)",
     "iu_mav_3h": "Auroral electrojet (IU index, 3h moving average)",
-    # "iu_mav_6h": "Auroral electrojet (IU index, 6h moving average)",
     "iu_mav_12h": "Auroral electrojet (IU index, 12h moving average)",
-    # "iu_mav_24h": "Auroral electrojet (IU index, 24h moving average)",
-    "hf": "HF-EU index",
-    "hf_mav_2h": "HF-EU index (2h moving average)",
+    "hf": "HF-INT index",
+    "hf_mav_2h": "HF-INT index (2h moving average)",
     "f_107_adj": "F10.7",
     "hp_30": "HP-30",
     "smr": "SMR (ring current)",
     "solar_zenith_angle": "Solar Zenith Angle",
     "newell": "Newell index",
-    "rho": "ρ (solar wind density)",  # "Solar wind flux density",
-    "vx": "vx (solar wind velocity)",  # "Solar wind flux radial velocity",
-    "bz": "Bz (interplanetary magnetic field)",  # "Strength of the interplanetary magnetic field in a north/south direction",
-    # "local_warning_level_at": "Local warning level (Athens)",
-    # "local_warning_level_ff": "Local warning level (Fairford)",
-    # "local_warning_level_jr": "Local warning level (Juliusruh)",
-    # "local_warning_level_pq": "Local warning level (Průhonice)",
-    # "local_warning_level_ro": "Local warning level (Rome)",
-    # "local_warning_level_vt": "Local warning level (San Vito)",
+    "rho": "ρ (solar wind density)",
+    "vx": "vx (solar wind velocity)",
+    "bz": "Bz (interplanetary magnetic field)",
     "spectral_contribution_at": "Spectral contribution (Athens)",
     "spectral_contribution_ff": "Spectral contribution (Fairford)",
     "spectral_contribution_jr": "Spectral contribution (Juliusruh)",
@@ -105,8 +95,8 @@ FEAT_NAMES_DICT = {
     "Auroral electrojet (IU) index": "Measures the strongest current intensities of the eastward auroral electrojets in the sector covered by the FMI-IMAGE magnetometer network",
     "Auroral electrojet (IU) variation": "Change in the IU index (increase, decrease, stationary)",
     "Auroral electrojet (IU) moving averages": "IU exponential moving averages within 3- and 12-hours window",
-    "HF-EU index": "High-Frequency interferometry index, identifying activity over the European network of ionosondes",
-    "HF-EU index (2h moving average)": "HF-EU exponential moving averages within 2-hours window",
+    "HF-INT index": "High-Frequency interferometry index, identifying activity over the European network of ionosondes",
+    "HF-INT index (2h moving average)": "HF-INT exponential moving averages within 2-hours window",
     "F10.7": "Solar radio flux at 10.7 cm (2800 MHz)",
     "HP-30": "Half-hourly geomagnetic index",
     "SMR (ring current)": "SuperMAG partial ring current index",
@@ -126,4 +116,26 @@ OUTP_NAMES_DICT = {
     "Balanced prediction": "Binary output of the model with decision threshold set to 0.68 (mean cross-validated F1-score: 0.56)",
     "High-precision prediction": "Binary output of the model with decision threshold set to 0.85 (mean cross-validated F1-score: 0.50), in order to achieve 80%-level precision",
     "High-sensitivity prediction": "Binary output of the model with decision threshold set to 0.54 (mean cross-validated F1-score: 0.55), in order to achieve 60%-level recall",
+}
+
+# Units of measure for plotting
+VAR_UOM_DICT = {
+    "ie_fix": "nT",
+    "ie_mav_3h": "nT",
+    "ie_mav_12h": "nT",
+    "iu_fix": "nT",
+    "iu_mav_3h": "nT",
+    "iu_mav_12h": "nT",
+    "f_107_adj": "sfu",
+    "smr": "nT",
+    "newell": "Wb/s",
+    "rho": "1/m^3",
+    "vx": "km/s",
+    "bz": "nT",
+    "velocity_at": "m/s",
+    "velocity_ff": "m/s",
+    "velocity_jr": "m/s",
+    "velocity_pq": "m/s",
+    "velocity_ro": "m/s",
+    "velocity_vt": "m/s",
 }
