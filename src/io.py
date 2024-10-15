@@ -93,14 +93,15 @@ def get_techtide_hf(start: str, stop: str) -> pd.DataFrame:
     -------
     pd.DataFrame
     """
-    response = techtide_response(start=start, stop=stop, product="hficond")
+    product = "hficond"
+    response = techtide_response(start=start, stop=stop, product=product)
 
     if response.status_code == 200:
         with zipfile.ZipFile(BytesIO(response.content)) as z:
             results = []
 
             for file_ in z.namelist():
-                if file_.startswith("TechTIDE_hficond"):
+                if file_.startswith(f"TechTIDE_{product}_"):
                     with z.open(file_) as f:
                         first_line = f.readline().decode("utf-8").strip()
                         datetime_match = re.search(r"(\d{8})(\d{4})", first_line)
@@ -124,7 +125,9 @@ def get_techtide_hf(start: str, stop: str) -> pd.DataFrame:
         return pd.DataFrame({})
 
 
-def get_techtide_ionosondes(start: str, stop: str) -> pd.DataFrame:
+def get_techtide_ionosondes(
+    start: str, stop: str, iono_list: list[str]
+) -> pd.DataFrame:
     """
     Convenience function to fetch ionosondes data from TechTIDE API
 
@@ -134,9 +137,51 @@ def get_techtide_ionosondes(start: str, stop: str) -> pd.DataFrame:
         Start date-time in 'YYYY-MM-DD HH:MM:SS' format
     stop : str
         End date-time in 'YYYY-MM-DD HH:MM:SS' format
+    iono_list : list[str]
+        List of ionosondes of interest; those available are:
+        AT138, DB049, EB040, FF051, GR13L, HE13N, JR055,
+        LV12P, MU12K, PQ052, RL052, RO041, SO148, VT139
 
     Returns
     -------
     pd.DataFrame
     """
-    response = techtide_response(start=start, stop=stop, product="hfi")
+    product = "hfi"
+    cols_dict = {
+        "STA": "cod_station",
+        "DATE&TIME": "datetime",
+        "SPCONT": "spectral_contribution",
+        "VEL": "velocity",
+        "AZI": "azimuth",
+    }
+    response = techtide_response(start=start, stop=stop, product=product)
+
+    results = []
+    if response.status_code == 200:
+        with zipfile.ZipFile(BytesIO(response.content)) as z:
+            for file_ in z.namelist():
+                if file_.startswith(f"TechTIDE_{product}_"):
+                    with z.open(file_) as f:
+                        df_ = pd.read_csv(
+                            f, sep="\s+", skiprows=1, usecols=cols_dict.keys()
+                        )
+                        df_.columns = cols_dict.values()
+
+                        df_ = df_[df_["cod_station"].isin(iono_list)]
+
+                        df_["datetime"] = pd.to_datetime(
+                            df_["datetime"], format="%Y%m%d%H%M"
+                        )
+
+                        df_["cod_station"] = (
+                            df_["cod_station"].str.slice(0, 2).str.lower()
+                        )
+
+                        results.append(df_)
+
+        df = pd.concat(objs=results).set_index(["datetime", "cod_station"]).unstack()
+        df.columns = ["_".join(col).strip() for col in df.columns.values]
+        return df
+    else:
+        print(response.status_code)
+        return pd.DataFrame({})
