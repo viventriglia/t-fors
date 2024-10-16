@@ -1,8 +1,8 @@
+import requests
+from io import StringIO, BytesIO
 from pathlib import Path
 from typing import Literal
-import requests
 import zipfile
-from io import BytesIO
 from urllib.parse import quote
 import re
 
@@ -185,3 +185,138 @@ def get_techtide_ionosondes(
     else:
         print(response.status_code)
         return pd.DataFrame({})
+
+
+def get_gfz_f107(end_date: str = None, last_n_days: int = 1) -> pd.DataFrame:
+    """
+    Function that downloads F10.7 (adjusted) within a specified time interval
+    as collected by GFZ German Research Centre for Geosciences
+
+    Parameters
+    ----------
+    end_date : str, optional
+        End date of the time interval in 'YYYY-MM-DD' format, by default None
+        If None, the function returns the last `last_n_days` days retrieved
+    last_n_days : int, optional
+        Number of days to return from the end of the dataset, by default 1
+
+    Returns
+    -------
+    pd.DataFrame
+    """
+    response = requests.get(
+        "https://kp.gfz-potsdam.de/app/files/Kp_ap_Ap_SN_F107_since_1932.txt"
+    )
+    if response.status_code != 200:
+        raise Exception(f"Error while downloading data: {response.status_code}")
+
+    data = StringIO(response.text)
+
+    # Skipping the header
+    data_lines = []
+    for line in data:
+        if not line.startswith("#"):
+            data_lines.append(line)
+
+    df = pd.read_csv(
+        StringIO("".join(data_lines)),
+        sep="\s+",
+        header=None,
+        usecols=[0, 1, 2, 26],
+        names=[
+            "year",
+            "month",
+            "day",
+            "f_107_adj",
+        ],
+        na_values=[-1.0],
+    )
+
+    df["date"] = pd.to_datetime(
+        df["year"].astype(str)
+        + "-"
+        + df["month"].astype(str)
+        + "-"
+        + df["day"].astype(str)
+    )
+
+    df = df.drop(columns=["year", "month", "day"]).set_index("date")
+
+    if end_date is None:
+        return df.tail(last_n_days)
+    else:
+        end_date = pd.to_datetime(end_date)
+        return df.loc[:end_date].tail(last_n_days)
+
+
+def get_gfz_hp30(start: str, stop: str) -> pd.DataFrame:
+    """
+    Function that downloads Hp30 within a specified time interval
+    as produced by GFZ German Research Centre for Geosciences
+
+    Parameters
+    ----------
+    start : str
+        Start date-time in 'YYYY-MM-DD HH:MM:SS' format
+    stop : str
+        End date-time in 'YYYY-MM-DD HH:MM:SS' format
+
+    Returns
+    -------
+    pd.DataFrame
+    """
+    response = requests.get(
+        "https://kp.gfz-potsdam.de/app/files/Hp30_ap30_complete_series.txt"
+    )
+    if response.status_code != 200:
+        raise Exception(f"Error while downloading data: {response.status_code}")
+
+    data = StringIO(response.text)
+
+    # Skipping the header
+    data_lines = []
+    for line in data:
+        if not line.startswith("#"):
+            data_lines.append(line)
+
+    df = pd.read_csv(
+        StringIO("".join(data_lines)),
+        sep="\s+",
+        header=None,
+        usecols=[0, 1, 2, 3, 7],
+        names=[
+            "year",
+            "month",
+            "day",
+            "hour",
+            "hp_30",
+        ],
+        na_values=[-1.000],
+    )
+
+    df["date"] = pd.to_datetime(
+        df["year"].astype(str)
+        + "-"
+        + df["month"].astype(str)
+        + "-"
+        + df["day"].astype(str)
+    )
+
+    # Pre-filtering the dataframe (by dates) to reduce its size
+    df = df[df["date"].between(start[:10], stop[:10])]
+
+    df["datetime"] = pd.to_datetime(
+        df["year"].astype(str)
+        + "-"
+        + df["month"].astype(str)
+        + "-"
+        + df["day"].astype(str)
+        + " "
+        + pd.to_datetime(df["hour"] * 3600, unit="s").dt.strftime("%H:%M")
+    )
+
+    return (
+        df.drop(columns=["year", "month", "day", "date", "hour"])
+        .set_index("datetime")
+        .loc[start:stop]
+    )
