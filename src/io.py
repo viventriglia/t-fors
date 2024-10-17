@@ -189,8 +189,8 @@ def get_techtide_ionosondes(
 
 def get_gfz_f107(end_date: str = None, last_n_days: int = 1) -> pd.DataFrame:
     """
-    Function that downloads F10.7 (adjusted) within a specified time interval
-    as collected by GFZ German Research Centre for Geosciences
+    Convenience function that downloads F10.7 (adjusted) within a specified time
+    interval as collected by GFZ German Research Centre for Geosciences
 
     Parameters
     ----------
@@ -212,9 +212,9 @@ def get_gfz_f107(end_date: str = None, last_n_days: int = 1) -> pd.DataFrame:
 
     data = StringIO(response.text)
 
-    # Skipping the header
     data_lines = []
     for line in data:
+        # Skipping comments at the top
         if not line.startswith("#"):
             data_lines.append(line)
 
@@ -251,7 +251,7 @@ def get_gfz_f107(end_date: str = None, last_n_days: int = 1) -> pd.DataFrame:
 
 def get_gfz_hp30(start: str, stop: str) -> pd.DataFrame:
     """
-    Function that downloads Hp30 within a specified time interval
+    Convenience function that downloads Hp30 within a specified time interval
     as produced by GFZ German Research Centre for Geosciences
 
     Parameters
@@ -273,9 +273,9 @@ def get_gfz_hp30(start: str, stop: str) -> pd.DataFrame:
 
     data = StringIO(response.text)
 
-    # Skipping the header
     data_lines = []
     for line in data:
+        # Skipping comments at the top
         if not line.startswith("#"):
             data_lines.append(line)
 
@@ -320,3 +320,65 @@ def get_gfz_hp30(start: str, stop: str) -> pd.DataFrame:
         .set_index("datetime")
         .loc[start:stop]
     )
+
+
+def get_fmi_iu_ie() -> pd.DataFrame:
+    """
+    Convenience function to get IU and IE derived from IMAGE magnetometers
+    as curated by FMI (https://space.fmi.fi/image/realtime/eurisgic/)
+
+    Returns
+    -------
+    pd.DataFrame
+    """
+    response = requests.get(
+        "https://space.fmi.fi/image/realtime/eurisgic/realtime_iu_il.txt"
+    )
+    if response.status_code != 200:
+        raise Exception(f"Error while downloading data: {response.status_code}")
+
+    data = StringIO(response.text)
+
+    data_lines = []
+    for line in data:
+        # Skipping comments at the top
+        if not line.startswith("%"):
+            data_lines.append(line)
+
+    df = pd.read_csv(
+        StringIO("".join(data_lines)),
+        sep="\s+",
+        header=None,
+        usecols=[0, 1, 2, 3, 4, 5, 6, 7],
+        names=[
+            "year",
+            "month",
+            "day",
+            "hour",
+            "minute",
+            "second",
+            "iu",
+            "il",
+        ],
+    )
+
+    df["datetime"] = pd.to_datetime(
+        df["year"].astype(str)
+        + "-"
+        + df["month"].astype(str)
+        + "-"
+        + df["day"].astype(str)
+        + " "
+        + df["hour"].astype(str)
+        + ":"
+        + df["minute"].astype(str)
+        + ":"
+        + df["second"].astype(str)
+    )
+
+    # Evaluating the proper electrojet indicator, IE
+    df["ie"] = df["iu"] - df["il"]
+
+    return df.drop(
+        columns=["year", "month", "day", "hour", "minute", "second", "il"]
+    ).set_index("datetime")
