@@ -39,6 +39,40 @@ def resample_time_series(
     return df.resample(time_interval, on=on_column).agg(aggregation_function)
 
 
+def get_moving_avg(
+    df: pd.DataFrame, cols: list[str], windows: list[int]
+) -> pd.DataFrame:
+    """
+    Adds columns to the DataFrame with moving averages for each specified column and each time window
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Input DataFrame containing the data
+    cols : list[str]
+        List of columns for which to calculate the moving average
+    windows : list[int]
+        List of time windows (in hours) for the moving average calculation
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with the added moving average columns
+    """
+    if not hasattr(cols, "__iter__") or not hasattr(windows, "__iter__"):
+        raise ValueError("'cols' and 'windows' must both be iterable")
+
+    periods = [2 * wd_ for wd_ in windows]
+
+    for col_ in cols:
+        for per_ in periods:
+            df[f"{col_}_mav_{per_/2:.0f}h"] = (
+                df[col_].rolling(window=int(per_)).mean().round(2)
+            )
+
+    return df
+
+
 def get_solar_position(
     time: pd.DatetimeIndex,
     columns: Literal[
