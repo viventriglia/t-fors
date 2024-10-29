@@ -6,6 +6,8 @@ import pandas as pd
 import numpy as np
 import mlflow
 
+from src import FASTAPI_SUMMARY, FASTAPI_DESC, FASTAPI_CONTACT, FASTAPI_LICENSE
+
 
 class InputDataModel(BaseModel):
     """Pydantic-based data model"""
@@ -59,10 +61,17 @@ def get_model(request: Request):
     return request.app.state.model
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="T-FORS",
+    summary=FASTAPI_SUMMARY,
+    description=FASTAPI_DESC,
+    contact=FASTAPI_CONTACT,
+    license_info=FASTAPI_LICENSE,
+    lifespan=lifespan,
+)
 
 
-@app.get("/", tags=["Check Health"])
+@app.get("/", tags=["Health Check"])
 def root():
     return {"message": "The T-FORS LSTID forecasting service is running"}
 
