@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from dotenv import dotenv_values
+
 # Solar Zenith Angle
 LATITUDE = 50.110656
 LONGITUDE = 8.682526
@@ -7,6 +9,9 @@ ALTITUDE = 350_000
 
 # Data
 DATA_IN = Path("..", "data", "in")
+
+# SSL certificates
+TECHTIDE_CERT_PATH = dotenv_values("../.env.secret")["TECHTIDE_CERT_PATH"]
 
 # MLFlow
 ML_SERVER_URI = "http://localhost:5000"
