@@ -34,6 +34,7 @@ streamlit = "^1.31.1"
 venn-abers = "^1.4.1"
 crepes = "^0.6.2"
 fastapi = {extras = ["standard"], version = "^0.115.4"}
+python-dotenv = "^1.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
