@@ -7,6 +7,7 @@ from urllib.parse import quote
 import re
 
 import pandas as pd
+import numpy as np
 
 
 def read_time_series(
@@ -187,7 +188,7 @@ def get_techtide_ionosondes(
         return pd.DataFrame({})
 
 
-def get_gfz_f107(end_date: str = None, last_n_days: int = 1) -> pd.DataFrame:
+def get_gfz_f107(end_date: str = None, last_n_days: int = 3) -> pd.DataFrame:
     """
     Convenience function that downloads F10.7 (adjusted) within a specified time
     interval as collected by GFZ German Research Centre for Geosciences
@@ -198,14 +199,15 @@ def get_gfz_f107(end_date: str = None, last_n_days: int = 1) -> pd.DataFrame:
         End date of the time interval in 'YYYY-MM-DD' format, by default None
         If None, the function returns the last `last_n_days` days retrieved
     last_n_days : int, optional
-        Number of days to return from the end of the dataset, by default 1
+        Number of days to return from the end of the dataset, by default 3
 
     Returns
     -------
     pd.DataFrame
     """
     response = requests.get(
-        "https://kp.gfz-potsdam.de/app/files/Kp_ap_Ap_SN_F107_since_1932.txt"
+        "https://www-app3.gfz-potsdam.de/kp_index/Kp_ap_Ap_SN_F107_nowcast.txt"
+        # "https://www-app3.gfz-potsdam.de/kp_index/Kp_ap_Ap_SN_F107_since_1932.txt"
     )
     if response.status_code != 200:
         raise Exception(f"Error while downloading data: {response.status_code}")
@@ -249,7 +251,7 @@ def get_gfz_f107(end_date: str = None, last_n_days: int = 1) -> pd.DataFrame:
         return df.loc[:end_date].tail(last_n_days)
 
 
-def get_gfz_hp30(start: str, stop: str) -> pd.DataFrame:
+def _get_gfz_hp30(start: str, stop: str) -> pd.DataFrame:
     """
     Convenience function that downloads Hp30 within a specified time interval
     as produced by GFZ German Research Centre for Geosciences
@@ -320,6 +322,132 @@ def get_gfz_hp30(start: str, stop: str) -> pd.DataFrame:
         .set_index("datetime")
         .loc[start:stop]
     )
+
+
+def get_gfz_hp30(end_datetime: str = None, last_n_days: int = 1) -> pd.DataFrame:
+    """
+    Convenience function that downloads Hp30 within a specified time interval
+    as produced by GFZ German Research Centre for Geosciences
+
+    Parameters
+    ----------
+    # start : str
+    #     Start date-time in 'YYYY-MM-DD HH:MM:SS' format
+    # stop : str
+    #     End date-time in 'YYYY-MM-DD HH:MM:SS' format
+
+    Returns
+    -------
+    pd.DataFrame
+    """
+    response = requests.get(
+        "https://www-app3.gfz-potsdam.de/kp_index/Hp30_ap30_nowcast.txt"
+    )
+    if response.status_code != 200:
+        raise Exception(f"Error while downloading data: {response.status_code}")
+
+    data = StringIO(response.text)
+
+    data_lines = []
+    for line in data:
+        # Skipping comments at the top
+        if not line.startswith("#"):
+            data_lines.append(line)
+
+    df = pd.read_csv(
+        StringIO("".join(data_lines)),
+        sep="\s+",
+        header=None,
+        usecols=[0, 1, 2, 3, 7],
+        names=[
+            "year",
+            "month",
+            "day",
+            "hour",
+            "hp_30",
+        ],
+        na_values=[-1.000],
+    )
+
+    df["datetime"] = pd.to_datetime(
+        df["year"].astype(str)
+        + "-"
+        + df["month"].astype(str)
+        + "-"
+        + df["day"].astype(str)
+        + " "
+        + pd.to_datetime(df["hour"] * 3600, unit="s").dt.strftime("%H:%M")
+    )
+
+    # Here it is important to remove NaN values, which correspond to future
+    # values (not yet recorded); if they remained, we would still have
+    # last_n_days, but with several NaN values
+    df = (
+        df.drop(columns=["year", "month", "day", "hour"]).dropna().set_index("datetime")
+    )
+
+    last_n_half_hours = 2 * 24 * last_n_days
+    if end_datetime is None:
+        return df.tail(last_n_half_hours)
+    else:
+        end_datetime = pd.to_datetime(end_datetime)
+        return df.loc[:end_datetime].tail(last_n_half_hours)
+
+
+def get_noaa_l1(
+    end_propagated_datetime: str, include_newell: bool = True
+) -> pd.DataFrame:
+    """
+    Convenience function to retrieve magnetic field and solar wind data from
+    NOAA, collected at the L1 Lagrange point and projected to estimate
+    conditions at Earth's bow shock
+
+    Parameters
+    ----------
+    end_propagated_datetime : str
+        End date-time in 'YYYY-MM-DD HH:MM:SS' format
+    include_newell : bool, optional
+        If True, calculates the Newell coupling function, which estimates
+        the energy transfer from solar wind to the magnetosphere, by default True
+
+    Returns
+    -------
+    pd.DataFrame
+    """
+    cols = ["propagated_time_tag", "density", "by", "bz", "speed"]
+
+    df = pd.read_json(
+        "https://services.swpc.noaa.gov/products/geospace/propagated-solar-wind-1-hour.json",
+        convert_dates=False,
+    )
+
+    df.columns = df.iloc[0]
+    df = df[1:][cols].reset_index(drop=True)
+
+    for col_ in cols:
+        if "time_" in col_:
+            df[col_] = pd.to_datetime(df[col_])
+        else:
+            df[col_] = pd.to_numeric(df[col_])
+
+    # Assuming speed ~ |vx| -- gulp!
+    df["vx"] = -df["speed"]
+
+    df = df.rename(
+        columns={
+            "propagated_time_tag": "datetime",
+            "density": "rho",
+        }
+    )
+
+    if include_newell:
+        df["newell"] = (
+            df["speed"] ** (4 / 3)
+            * (df["by"] ** 2 + df["bz"] ** 2) ** (1 / 3)
+            * (np.sin(np.arctan(df["by"].abs().div(df["bz"])) / 2) ** (8 / 3))
+        ).round(1)
+
+    return df[df["datetime"].lt(end_propagated_datetime)].set_index("datetime")
 
 
 def get_fmi_iu_ie() -> pd.DataFrame:
