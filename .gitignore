@@ -31,12 +31,17 @@ ipython_config.py
 
 # Environments
 .env
+.env.secret
 .venv
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+
+# SSL certificates
+cert/*.pem
+cert/*.crt
 
 # mypy
 .mypy_cache/
@@ -47,8 +52,7 @@ dmypy.json
 cython_debug/
 
 # Data (.csv files are heavy)
-data/in/*.csv
-data/out/*.csv
+data/**/*.csv
 
 # CatBoost model stuff
 jupyters/catboost_info/*
