@@ -450,6 +450,47 @@ def get_noaa_l1(
     return df[df["datetime"].lt(end_propagated_datetime)].set_index("datetime")
 
 
+def get_noaa_dst(end_datetime: str) -> pd.DataFrame:
+    """
+    Convenience function to retrieve Disturbance Storm Time (Dst) data from
+    NOAA, derived from a network of near-equatorial geomagnetic observatories
+    that measures the intensity of the globally symmetrical equatorial
+    electrojet (the "ring current")
+
+    Parameters
+    ----------
+    end_datetime : str
+        End date-time in 'YYYY-MM-DD HH:MM:SS' format
+
+    Returns
+    -------
+    pd.DataFrame
+    """
+    cols = ["time_tag", "dst"]
+
+    df = pd.read_json(
+        "https://services.swpc.noaa.gov/products/kyoto-dst.json",
+        convert_dates=False,
+    )
+
+    df.columns = df.iloc[0]
+    df = df[1:][cols].reset_index(drop=True)
+
+    for col_ in cols:
+        if "time_" in col_:
+            df[col_] = pd.to_datetime(df[col_])
+        else:
+            df[col_] = pd.to_numeric(df[col_])
+
+    df = df.rename(
+        columns={
+            "time_tag": "datetime",
+        }
+    )
+
+    return df[df["datetime"].lt(end_datetime)].set_index("datetime")
+
+
 def get_fmi_iu_ie() -> pd.DataFrame:
     """
     Convenience function to get IU and IE derived from IMAGE magnetometers
