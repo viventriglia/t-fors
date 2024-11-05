@@ -444,7 +444,7 @@ def get_noaa_l1(
         df["newell"] = (
             df["speed"] ** (4 / 3)
             * (df["by"] ** 2 + df["bz"] ** 2) ** (1 / 3)
-            * (np.sin(np.arctan(df["by"].abs().div(df["bz"])) / 2) ** (8 / 3))
+            * (np.sin(np.arctan((df["by"].div(df["bz"]).abs())) / 2) ** (8 / 3))
         ).round(1)
 
     return df[df["datetime"].lt(end_propagated_datetime)].set_index("datetime")
