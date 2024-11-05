@@ -10,12 +10,47 @@ ALTITUDE = 350_000
 # Data
 DATA_IN = Path("..", "data", "in")
 
-# SSL certificates
-TECHTIDE_CERT_PATH = dotenv_values("../.env.secret")["TECHTIDE_CERT_PATH"]
-
 # MLFlow
 ML_SERVER_URI = "http://localhost:5000"
 EXPERIMENT_NAME = "CatBoost"
+ML_MODEL_COLS = [
+    "ie_fix",
+    "ie_variation",
+    "ie_mav_3h",
+    "ie_mav_12h",
+    "iu_fix",
+    "iu_variation",
+    "iu_mav_3h",
+    "iu_mav_12h",
+    "hf",
+    "hf_mav_2h",
+    "f_107_adj",
+    "hp_30",
+    "smr",
+    "solar_zenith_angle",
+    "newell",
+    "bz",
+    "vx",
+    "rho",
+    "spectral_contribution_at",
+    "spectral_contribution_ff",
+    "spectral_contribution_jr",
+    "spectral_contribution_pq",
+    "spectral_contribution_ro",
+    "spectral_contribution_vt",
+    "azimuth_at",
+    "azimuth_ff",
+    "azimuth_jr",
+    "azimuth_pq",
+    "azimuth_ro",
+    "azimuth_vt",
+    "velocity_at",
+    "velocity_ff",
+    "velocity_jr",
+    "velocity_pq",
+    "velocity_ro",
+    "velocity_vt",
+]
 
 # FastAPI
 FASTAPI_SUMMARY = """Traveling Ionospheric Disturbances Forecasting System
