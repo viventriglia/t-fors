@@ -331,10 +331,11 @@ def get_gfz_hp30(end_datetime: str = None, last_n_days: int = 1) -> pd.DataFrame
 
     Parameters
     ----------
-    # start : str
-    #     Start date-time in 'YYYY-MM-DD HH:MM:SS' format
-    # stop : str
-    #     End date-time in 'YYYY-MM-DD HH:MM:SS' format
+    end_datetime : str, optional
+        End date-time in 'YYYY-MM-DD HH:MM:SS' format, by default None
+        If None, the function returns the last `last_n_days` days retrieved
+    last_n_days : int, optional
+        Number of days to return from the end of the dataset, by default 1
 
     Returns
     -------
