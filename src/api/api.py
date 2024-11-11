@@ -86,6 +86,15 @@ def root():
     return {"message": "The T-FORS LSTID forecasting service is up and running"}
 
 
+@app.get("/data", tags=["data"])
+async def get_data():
+    try:
+        return get_real_time_data().fillna("").to_dict("index")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving data: {e}")
+
+
 @app.post("/predict", tags=["predict"])
 def predict(model=Depends(get_model)):
     try:
