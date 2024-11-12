@@ -1,0 +1,12 @@
+services:
+  web-app:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    image: t-fors-web-app
+    container_name: t-fors-web-app
+    restart: unless-stopped
+    # volumes:
+    #   - .:/app
+    ports:
+      - 8501:8501
