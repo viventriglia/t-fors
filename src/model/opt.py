@@ -4,7 +4,7 @@ from sklearn.metrics import f1_score
 from sklearn.model_selection import TimeSeriesSplit
 import optuna
 
-from src.model import instantiate_and_fit_model
+from model.model import instantiate_and_fit_model
 
 
 def objective(

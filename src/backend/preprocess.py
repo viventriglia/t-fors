@@ -6,8 +6,8 @@ import numpy as np
 from sklearn.cluster import KMeans
 import pvlib
 
-from . import LATITUDE, LONGITUDE, ALTITUDE, DATA_IN
-from src.io import read_time_series
+from backend import LATITUDE, LONGITUDE, ALTITUDE, DATA_IN
+from backend.io import read_time_series
 
 
 def resample_time_series(
@@ -15,7 +15,7 @@ def resample_time_series(
     aggregation_function: Union[
         Literal["mean", "median", "max"], dict[str, Union[str, list[str]]]
     ],
-    time_interval: str = "30T",
+    time_interval: str = "30min",
     on_column: str = None,
 ) -> pd.DataFrame:
     """
@@ -28,7 +28,7 @@ def resample_time_series(
     aggregation_function : Literal["mean", "median", "max"], dict[str, Union[str, list[str]]]
         Aggregation function to use
     time_interval : str, optional
-        String format (according to https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior), by default "30T"
+        String format (according to https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior), by default "30min"
     on_column : str, optional
         DataFrame column to use for resampling, by default None (the index is used)
 
@@ -187,7 +187,7 @@ def preprocess_ionosonde_data(
     aggregation_function: Union[
         Literal["mean", "median", "max"], dict[str, Union[str, list[str]]]
     ],
-    resample_time_interval: str = "30T",
+    resample_time_interval: str = "30min",
 ) -> pd.DataFrame:
     """
     Convenience function that loads the specified ionosonde data, resamples it and applies some other standardisation transformations
@@ -199,7 +199,7 @@ def preprocess_ionosonde_data(
     aggregation_function : Union[Literal["mean", "median", "max"], dict[str, Union[str, list[str]]]]
         Aggregation function to use for resampling the original time series
     resample_time_interval : str, optional
-        String format (according to https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior), by default "30T"
+        String format (according to https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior), by default "30min"
 
     Returns
     -------

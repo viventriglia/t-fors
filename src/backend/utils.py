@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 
-from src.io import (
+from backend.io import (
     get_techtide_hf,
     get_techtide_ionosondes,
     get_gfz_f107,
@@ -12,13 +12,13 @@ from src.io import (
     get_noaa_dst,
     get_fmi_iu_ie,
 )
-from src.preprocess import (
+from backend.preprocess import (
     resample_time_series,
     get_moving_avg,
     get_categories,
     get_solar_position,
 )
-from src import ML_MODEL_COLS
+from backend import ML_MODEL_COLS
 
 
 def get_real_time_data() -> pd.DataFrame:
