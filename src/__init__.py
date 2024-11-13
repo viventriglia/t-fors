@@ -1,7 +1,5 @@
 from pathlib import Path
 
-from dotenv import dotenv_values
-
 # Solar Zenith Angle
 LATITUDE = 50.110656
 LONGITUDE = 8.682526
