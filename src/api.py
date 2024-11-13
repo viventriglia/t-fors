@@ -5,10 +5,11 @@ from fastapi import FastAPI, Depends, Request, HTTPException
 from pydantic import BaseModel, Field, ValidationError
 import pandas as pd
 import numpy as np
-import mlflow
+import catboost as cb
 
-from src import FASTAPI_SUMMARY, FASTAPI_DESC, FASTAPI_CONTACT, FASTAPI_LICENSE
-from src.api.utils import get_real_time_data
+from backend import FASTAPI_SUMMARY, FASTAPI_DESC, FASTAPI_CONTACT, FASTAPI_LICENSE
+from model import MODEL_PATH
+from backend.utils import get_real_time_data
 
 
 class InputDataModel(BaseModel):
@@ -55,9 +56,8 @@ class InputDataModel(BaseModel):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
-        model = mlflow.catboost.load_model(
-            "runs:/47379e58abff4b18989898a5b6ecbe08/model"
-        )
+        from_file = cb.CatBoostClassifier()
+        model = from_file.load_model(MODEL_PATH)
         app.state.model = model
     except Exception as e:
         raise RuntimeError(f"Error loading model: {e}")
