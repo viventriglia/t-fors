@@ -1,3 +1,5 @@
-.\.venv\Scripts\activate.ps1
+.\src\.venv\Scripts\activate.ps1
 
-uvicorn src.api.api:app --reload
+cd .\src\
+
+uvicorn api:app --reload
