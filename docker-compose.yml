@@ -10,3 +10,15 @@ services:
     #   - .:/app
     ports:
       - 8501:8501
+
+  api:
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+    image: t-fors-api
+    container_name: t-fors-api
+    restart: unless-stopped
+    # volumes:
+    #   - .:/app
+    ports:
+      - 8000:8000
