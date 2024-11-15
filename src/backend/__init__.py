@@ -51,21 +51,20 @@ ML_MODEL_COLS = [
 ]
 
 # FastAPI
-FASTAPI_SUMMARY = """Traveling Ionospheric Disturbances Forecasting System
-(T-FORS), funded by the European Community, Horizon Europe
+FASTAPI_SUMMARY = """
+Travelling Ionospheric Disturbances Forecasting System (T-FORS),
+funded by the European Community, Horizon Europe
 """
-FASTAPI_DESC = """ChimichangApp API helps you do awesome stuff. 🚀
+FASTAPI_DESC = """
+T-FORS is a near real-time forecasting service that exploits solar and geomagnetic
+data to forecast Travelling Ionospheric Disturbances (TIDs). This API currently
+offers three endpoints:
 
-## Items
-
-You can **read items**.
-
-## Users
-
-You will be able to:
-
-* **Create users** (_not implemented_).
-* **Read users** (_not implemented_)."""
+- **Health check**: checks that the service is active
+- **Data retrieval**: retrieves near real-time data
+- **Prediction**: provides predictions based on near real-time data using
+ a pre-trained machine learning model
+"""
 FASTAPI_CONTACT = {
     "name": "The T-FORS Project",
     "url": "https://t-fors.eu/",
