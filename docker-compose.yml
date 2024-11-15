@@ -1,9 +1,9 @@
 services:
   web-app:
     build:
-      context: .
-      dockerfile: ./app/Dockerfile
-    image: t-fors-web-app
+      context: ./app
+      dockerfile: Dockerfile
+    image: t-fors-web-app:latest
     container_name: t-fors-web-app
     restart: unless-stopped
     ports:
@@ -11,9 +11,9 @@ services:
 
   api:
     build:
-      context: .
-      dockerfile: ./src/Dockerfile
-    image: t-fors-api
+      context: ./src
+      dockerfile: Dockerfile
+    image: t-fors-api:latest
     container_name: t-fors-api
     restart: unless-stopped
     ports:
@@ -23,7 +23,7 @@ services:
     build:
       context: .
       dockerfile: ./jupyters/Dockerfile
-    image: t-fors-jupyter
+    image: t-fors-jupyter:latest
     container_name: t-fors-jupyter
     volumes:
       - ./src/:/app/src/
