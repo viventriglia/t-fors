@@ -7,13 +7,13 @@ Traveling Ionospheric Disturbances Forecasting System (funded by the European Co
 
 - [How can I run it?](#how-can-i-run-it)
 
-    - [Run locally 💻](#run-locally-💻)
+    - [Run locally 💻](#run-locally-)
 
-    - [Spin up a container 🐋](#spin-up-a-container-🐋)
+    - [Spin up a container 🐋](#spin-up-a-container-)
 
 - [How can I help?](#how-can-i-help)
 
-## What is that?
+## What is it?
 We aim at the development of a machine-learning-based algorithm to forecast **Large Scale Traveling Ionospheric Disturbances**. The work is carried out within the ["T-FORS - Traveling Ionospheric Disturbances Forecasting System"](https://cordis.europa.eu/project/id/101081835) project.
 
 ## How can I run it?
