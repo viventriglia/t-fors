@@ -9,6 +9,8 @@ import re
 import pandas as pd
 import numpy as np
 
+from backend import L1_DIST, BSN_DIST
+
 
 def read_time_series(
     data_in_path: Path,
@@ -395,7 +397,7 @@ def get_gfz_hp30(end_datetime: str = None, last_n_days: int = 1) -> pd.DataFrame
         return df.loc[:end_datetime].tail(last_n_half_hours)
 
 
-def get_noaa_l1(
+def _get_noaa_l1(
     end_propagated_datetime: str, include_newell: bool = True
 ) -> pd.DataFrame:
     """
@@ -449,6 +451,57 @@ def get_noaa_l1(
         ).round(1)
 
     return df[df["datetime"].lt(end_propagated_datetime)].set_index("datetime")
+
+
+def get_noaa_l1(end_propagated_datetime: str) -> pd.DataFrame:
+
+    try:
+        response = requests.get(
+            "https://services.swpc.noaa.gov/products/solar-wind/mag-6-hour.json"
+        )
+        df_mag = pd.DataFrame(response.json()[1:], columns=response.json()[0])
+        response = requests.get(
+            "https://services.swpc.noaa.gov/products/solar-wind/plasma-6-hour.json"
+        )
+        df_plasma = pd.DataFrame(response.json()[1:], columns=response.json()[0])
+    except:
+        raise Exception(
+            f"Error in retrieving solar wind data. Status code: {response.status_code}. Text: {response.text}"
+        )
+
+    df = df_mag.merge(df_plasma, on="time_tag", how="outer")
+    df.index = pd.Index(pd.to_datetime(df.pop("time_tag")), name="datetime_measure")
+    df = df.apply(pd.to_numeric).reset_index()
+
+    df.columns = df.columns.str.removesuffix("_gsm")
+
+    df["seconds_to_arrive"] = np.round((L1_DIST - BSN_DIST) / df["speed"])
+    df["datetime"] = df["datetime_measure"] + pd.to_timedelta(
+        df["seconds_to_arrive"], unit="s"
+    )
+
+    df["newell"] = (
+        df["speed"] ** (4 / 3)
+        * (df["by"] ** 2 + df["bz"] ** 2) ** (1 / 3)
+        * (np.sin(np.arctan((df["by"].div(df["bz"]).abs())) / 2) ** (8 / 3))
+    ).round(1)
+
+    return (
+        df[df["datetime"].lt(end_propagated_datetime)]
+        .drop(
+            columns=[
+                "datetime_measure",
+                "seconds_to_arrive",
+                "lon",
+                "lat",
+                "temperature",
+                "bx",
+                "bt",
+            ]
+        )
+        .rename(columns={"density": "rho"})
+        .set_index("datetime")
+    )
 
 
 def get_noaa_dst(end_datetime: str) -> pd.DataFrame:

@@ -1,54 +1,56 @@
 from pathlib import Path
 
-# Solar Zenith Angle
+# Geo-Physical parameters
 LATITUDE = 50.110656
 LONGITUDE = 8.682526
 ALTITUDE = 350_000
+L1_DIST = 1_500_000
+BSN_DIST = 90_000
 
 # Data
 DATA_IN = Path("..", "data", "in")
 
-# MLFlow
+# MLFlow & FastAPI
 ML_SERVER_URI = "http://localhost:5000"
 EXPERIMENT_NAME = "CatBoost"
-ML_MODEL_COLS = [
-    "ie_fix",
-    "ie_variation",
-    "ie_mav_3h",
-    "ie_mav_12h",
-    "iu_fix",
-    "iu_variation",
-    "iu_mav_3h",
-    "iu_mav_12h",
-    "hf",
-    "hf_mav_2h",
-    "f_107_adj",
-    "hp_30",
-    "smr",
-    "solar_zenith_angle",
-    "newell",
-    "bz",
-    "vx",
-    "rho",
-    "spectral_contribution_at",
-    "spectral_contribution_ff",
-    "spectral_contribution_jr",
-    "spectral_contribution_pq",
-    "spectral_contribution_ro",
-    "spectral_contribution_vt",
-    "azimuth_at",
-    "azimuth_ff",
-    "azimuth_jr",
-    "azimuth_pq",
-    "azimuth_ro",
-    "azimuth_vt",
-    "velocity_at",
-    "velocity_ff",
-    "velocity_jr",
-    "velocity_pq",
-    "velocity_ro",
-    "velocity_vt",
-]
+ML_MODEL_COLS = {
+    "ie_fix": "float",
+    "ie_variation": "int",
+    "ie_mav_3h": "float",
+    "ie_mav_12h": "float",
+    "iu_fix": "float",
+    "iu_variation": "int",
+    "iu_mav_3h": "float",
+    "iu_mav_12h": "float",
+    "hf": "float",
+    "hf_mav_2h": "float",
+    "f_107_adj": "float",
+    "hp_30": "float",
+    "dst": "float",
+    "solar_zenith_angle": "float",
+    "newell": "float",
+    "bz": "float",
+    "speed": "float",
+    "rho": "float",
+    "spectral_contribution_at": "float",
+    "spectral_contribution_ff": "float",
+    "spectral_contribution_jr": "float",
+    "spectral_contribution_pq": "float",
+    "spectral_contribution_ro": "float",
+    "spectral_contribution_vt": "float",
+    "azimuth_at": "float",
+    "azimuth_ff": "float",
+    "azimuth_jr": "float",
+    "azimuth_pq": "float",
+    "azimuth_ro": "float",
+    "azimuth_vt": "float",
+    "velocity_at": "float",
+    "velocity_ff": "float",
+    "velocity_jr": "float",
+    "velocity_pq": "float",
+    "velocity_ro": "float",
+    "velocity_vt": "float",
+}
 
 # FastAPI
 FASTAPI_SUMMARY = """

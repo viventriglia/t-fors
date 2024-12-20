@@ -77,7 +77,7 @@ def get_real_time_data() -> pd.DataFrame:
             right_index=True,
         )
         .merge(
-            df_l1_30.drop(columns=["by", "speed"]),
+            df_l1_30.drop(columns=["by"]),
             how="outer",
             left_index=True,
             right_index=True,
@@ -105,47 +105,8 @@ def get_real_time_data() -> pd.DataFrame:
         altitude=0,
     ).round(1)
 
-    dtypes = {
-        "ie_fix": "float",
-        "ie_variation": "int",
-        "ie_mav_3h": "float",
-        "ie_mav_12h": "float",
-        "iu_fix": "float",
-        "iu_variation": "int",
-        "iu_mav_3h": "float",
-        "iu_mav_12h": "float",
-        "hf": "float",
-        "hf_mav_2h": "float",
-        "f_107_adj": "float",
-        "hp_30": "float",
-        "smr": "float",
-        "solar_zenith_angle": "float",
-        "newell": "float",
-        "bz": "float",
-        "vx": "float",
-        "rho": "float",
-        "spectral_contribution_at": "float",
-        "spectral_contribution_ff": "float",
-        "spectral_contribution_jr": "float",
-        "spectral_contribution_pq": "float",
-        "spectral_contribution_ro": "float",
-        "spectral_contribution_vt": "float",
-        "azimuth_at": "float",
-        "azimuth_ff": "float",
-        "azimuth_jr": "float",
-        "azimuth_pq": "float",
-        "azimuth_ro": "float",
-        "azimuth_vt": "float",
-        "velocity_at": "float",
-        "velocity_ff": "float",
-        "velocity_jr": "float",
-        "velocity_pq": "float",
-        "velocity_ro": "float",
-        "velocity_vt": "float",
-    }
-
     return (
         df_j.tail(1)
-        .rename(columns={"ie": "ie_fix", "iu": "iu_fix", "dst": "smr"})
-        .astype(dtypes)[ML_MODEL_COLS]
-    )  # FIXME
+        .rename(columns={"ie": "ie_fix", "iu": "iu_fix"})
+        .astype(ML_MODEL_COLS)[ML_MODEL_COLS.keys()]
+    )
