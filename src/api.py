@@ -8,7 +8,7 @@ import numpy as np
 import catboost as cb
 
 from backend import FASTAPI_SUMMARY, FASTAPI_DESC, FASTAPI_CONTACT, FASTAPI_LICENSE
-from model import MODEL_PATH
+from model import MODEL_PATH, THRESH_BALAN, THRESH_HPREC, THRESH_HSENS
 from backend.utils import get_real_time_data
 
 
@@ -107,16 +107,25 @@ def predict(model=Depends(get_model)):
             raise HTTPException(status_code=400, detail=f"Validation error: {e}")
 
         df_validated = pd.DataFrame([validated_data.model_dump()])
-        prediction = model.predict(df_validated)
+        prediction_score = model.predict_proba(df_validated)[:, 1]
 
-        if isinstance(prediction, (list, np.ndarray)):
-            prediction = float(prediction[0])
-        elif isinstance(prediction, (int, float)):
-            prediction = float(prediction)
+        if isinstance(prediction_score, (list, np.ndarray)):
+            prediction_score = float(prediction_score[0])
+        elif isinstance(prediction_score, (int, float)):
+            prediction_score = float(prediction_score)
         else:
             raise HTTPException(status_code=500, detail="Unexpected prediction format")
 
-        return {"prediction": prediction}
+        prediction_hprec = 1 if prediction_score > THRESH_HPREC else 0
+        prediction_balan = 1 if prediction_score > THRESH_BALAN else 0
+        prediction_hsens = 1 if prediction_score > THRESH_HSENS else 0
+
+        return {
+            "prediction_score": np.round(prediction_score, 3),
+            "prediction_hprec": prediction_hprec,
+            "prediction_balan": prediction_balan,
+            "prediction_hsens": prediction_hsens,
+        }
 
     except HTTPException as e:
         raise e
