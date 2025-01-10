@@ -23,6 +23,7 @@ python-dotenv = "^1.0.1"
 jupyter = "^1.0.0"
 notebook = "6.5.3"
 traitlets = "5.9.0"
+venn-abers = "^1.4.6"
 
 
 [build-system]

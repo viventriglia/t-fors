@@ -4149,6 +4149,21 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
+name = "venn-abers"
+version = "1.4.6"
+description = "Venn-ABERS calibration package"
+optional = false
+python-versions = "*"
+files = [
+    {file = "venn-abers-1.4.6.tar.gz", hash = "sha256:358fce6de61e9990b90fa384437a90244598e8d3442b7132d4bba428b0d07f7d"},
+]
+
+[package.dependencies]
+numpy = "*"
+pandas = "*"
+scikit-learn = "*"
+
+[[package]]
 name = "waitress"
 version = "3.0.1"
 description = "Waitress WSGI server"
@@ -4341,4 +4356,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "b0c7a10b6ffc2b376d57c36432784632da7235fab9286590a530b69fab453c5e"
+content-hash = "c3f00a3ce94265dd48e3fb45e16671aa9b857db1863abdcdd554cd9daf727600"
