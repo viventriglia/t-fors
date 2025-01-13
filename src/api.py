@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from typing import Optional
+from datetime import datetime
 
 from fastapi import FastAPI, Depends, Request, HTTPException
 from fastapi.responses import FileResponse
@@ -67,7 +67,7 @@ async def get_data():
         raise HTTPException(status_code=500, detail=f"Error retrieving data: {e}")
 
 
-@app.post("/predict", tags=["predict"], response_model=InputDataModel)
+@app.post("/predict", tags=["predict"], response_model=OutputDataModel)
 def predict(model=Depends(get_model)):
     try:
         df = get_real_time_data()
@@ -92,13 +92,17 @@ def predict(model=Depends(get_model)):
         prediction_balan = 1 if prediction_score > THRESH_BALAN else 0
         prediction_hsens = 1 if prediction_score > THRESH_HSENS else 0
 
-        return {
-            "datetime": df.index[0],
+        input_data = df.fillna("").replace("", None).to_dict(orient="records")[0]
+        output_data = {
+            "datetime_ref": df.index[0],
+            "datetime_run": datetime.utcnow(),
             "prediction_score": np.round(prediction_score, 3),
             "prediction_hprec": prediction_hprec,
             "prediction_balan": prediction_balan,
             "prediction_hsens": prediction_hsens,
+            **input_data,
         }
+        return OutputDataModel(**output_data)
 
     except HTTPException as e:
         raise e
