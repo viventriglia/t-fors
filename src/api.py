@@ -2,12 +2,19 @@ from contextlib import asynccontextmanager
 from typing import Optional
 
 from fastapi import FastAPI, Depends, Request, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field, ValidationError
 import pandas as pd
 import numpy as np
 import catboost as cb
 
-from backend import FASTAPI_SUMMARY, FASTAPI_DESC, FASTAPI_CONTACT, FASTAPI_LICENSE
+from backend import (
+    FASTAPI_SUMMARY,
+    FASTAPI_DESC,
+    FASTAPI_CONTACT,
+    FASTAPI_LICENSE,
+    FASTAPI_FAVICON_PATH,
+)
 from model import MODEL_PATH, THRESH_BALAN, THRESH_HPREC, THRESH_HSENS
 from backend.utils import get_real_time_data
 
@@ -145,6 +152,11 @@ app = FastAPI(
     license_info=FASTAPI_LICENSE,
     lifespan=lifespan,
 )
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse(FASTAPI_FAVICON_PATH)
 
 
 @app.get("/", tags=["health check"])

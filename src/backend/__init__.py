@@ -75,3 +75,4 @@ FASTAPI_LICENSE = {
     "name": "MIT License",
     "url": "https://opensource.org/license/mit",
 }
+FASTAPI_FAVICON_PATH = Path("assets", "images", "favicon.ico")
