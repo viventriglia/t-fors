@@ -73,12 +73,12 @@ async def favicon():
     return FileResponse(FASTAPI_FAVICON_PATH)
 
 
-@app.get("/", tags=["health check"])
+@app.get("/", include_in_schema=False)
 def root():
     return {"message": "The T-FORS LSTID forecasting service is up and running"}
 
 
-@app.get("/data", tags=["data"])
+@app.get("/data", tags=["data"], summary="Retrieve near real-time data")
 async def get_data():
     try:
         return get_real_time_data().fillna("").to_dict("index")
@@ -87,7 +87,12 @@ async def get_data():
         raise HTTPException(status_code=500, detail=f"Error retrieving data: {e}")
 
 
-@app.post("/predict", tags=["predict"], response_model=OutputDataModel)
+@app.post(
+    "/predict",
+    tags=["predict"],
+    summary="Get predictions based on near real-time data using a pre-trained model",
+    response_model=OutputDataModel,
+)
 def predict(model=Depends(get_model)):
     try:
         df = get_real_time_data()

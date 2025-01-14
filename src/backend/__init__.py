@@ -60,12 +60,10 @@ funded by the European Community, Horizon Europe
 FASTAPI_DESC = """
 T-FORS is a near real-time forecasting service that exploits solar and geomagnetic
 data to forecast Travelling Ionospheric Disturbances (TIDs). This API currently
-offers three endpoints:
+offers two endpoints:
 
-- **Health check**: checks that the service is active
-- **Data retrieval**: retrieves near real-time data
-- **Prediction**: provides predictions based on near real-time data using
- a pre-trained machine learning model
+- one for near real-time **data retrieval**
+- one to serve **predictions**, based on near real-time data and a pre-trained machine learning model
 """
 FASTAPI_CONTACT = {
     "name": "The T-FORS Project",
