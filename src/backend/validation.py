@@ -121,6 +121,9 @@ class OutputDataModel(BaseModel):
     prediction_score: float = Field(
         description="Raw model score, where a higher one means the model is more confident in its prediction; this score is related to the probability of an observation belonging to the positive class (LSTID in the following 3 hrs)"
     )
+    prediction_calib: float = Field(
+        description="Calibrated model score (with Venn-ABERS), where a higher score means the model is more confident in its prediction; this score is related to the probability of an observation belonging to the positive class (LSTID in the following 3 hrs)"
+    )
     prediction_hprec: int = Field(
         description="Binary output of the model with decision threshold set to 0.84, in order to achieve 80%-level precision"
     )

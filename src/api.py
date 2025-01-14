@@ -15,7 +15,13 @@ from backend import (
     FASTAPI_LICENSE,
     FASTAPI_FAVICON_PATH,
 )
-from model import MODEL_PATH, THRESH_BALAN, THRESH_HPREC, THRESH_HSENS
+from model import (
+    MODEL_PATH,
+    THRESH_BALAN,
+    THRESH_HPREC,
+    THRESH_HSENS,
+)
+from model.calibration import get_venn_abers_score, X_cal, y_cal
 from backend.utils import get_real_time_data
 from backend.validation import InputDataModel, OutputDataModel
 
@@ -79,15 +85,23 @@ def predict(model=Depends(get_model)):
             raise HTTPException(status_code=400, detail=f"Validation error: {e}")
 
         df_validated = pd.DataFrame([validated_data.model_dump()])
-        prediction_score = model.predict_proba(df_validated)[:, 1]
+        # Raw CatBoost score
+        prediction_score = model.predict_proba(df_validated)
+        # Calibrated score
+        prediction_calib = get_venn_abers_score(
+            p_cal=model.predict_proba(X_cal),
+            y_cal=y_cal.values,
+            p_test=prediction_score,
+        )
 
         if isinstance(prediction_score, (list, np.ndarray)):
-            prediction_score = float(prediction_score[0])
+            prediction_score = float(prediction_score[:, 1][0])
         elif isinstance(prediction_score, (int, float)):
-            prediction_score = float(prediction_score)
+            prediction_score = float(prediction_score[:, 1])
         else:
             raise HTTPException(status_code=500, detail="Unexpected prediction format")
 
+        # Operating modes (classification)
         prediction_hprec = 1 if prediction_score > THRESH_HPREC else 0
         prediction_balan = 1 if prediction_score > THRESH_BALAN else 0
         prediction_hsens = 1 if prediction_score > THRESH_HSENS else 0
@@ -97,6 +111,7 @@ def predict(model=Depends(get_model)):
             "datetime_ref": df.index[0],
             "datetime_run": datetime.utcnow(),
             "prediction_score": np.round(prediction_score, 3),
+            "prediction_calib": np.round(prediction_calib, 3),
             "prediction_hprec": prediction_hprec,
             "prediction_balan": prediction_balan,
             "prediction_hsens": prediction_hsens,
