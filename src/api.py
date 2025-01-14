@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from datetime import datetime
+import logging
 
 from fastapi import FastAPI, Depends, Request, HTTPException
 from fastapi.responses import FileResponse
@@ -25,15 +26,28 @@ from model.calibration import get_venn_abers_score, X_cal, y_cal
 from backend.utils import get_real_time_data
 from backend.validation import InputDataModel, OutputDataModel
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[logging.StreamHandler()],
+)
+logger = logging.getLogger(__name__)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
+        # ML model
+        logger.info("Loading the CatBoost model...")
         from_file = cb.CatBoostClassifier()
         model = from_file.load_model(MODEL_PATH)
+        logger.info("Model loaded successfully")
+
+        # Assets storage
         app.state.model = model
     except Exception as e:
-        raise RuntimeError(f"Error loading model: {e}")
+        logger.error(f"Error during asset loading: {e}")
+        raise RuntimeError(f"Error loading assets: {e}")
     yield
 
 
