@@ -2976,6 +2976,21 @@ docs = ["Sphinx (>=4.1.2,<4.2.0)", "sphinx-rtd-theme (>=0.5.2,<0.6.0)", "sphinxc
 test = ["aiohttp (>=3.10.5)", "flake8 (>=5.0,<6.0)", "mypy (>=0.800)", "psutil", "pyOpenSSL (>=23.0.0,<23.1.0)", "pycodestyle (>=2.9.0,<2.10.0)"]
 
 [[package]]
+name = "venn-abers"
+version = "1.4.6"
+description = "Venn-ABERS calibration package"
+optional = false
+python-versions = "*"
+files = [
+    {file = "venn-abers-1.4.6.tar.gz", hash = "sha256:358fce6de61e9990b90fa384437a90244598e8d3442b7132d4bba428b0d07f7d"},
+]
+
+[package.dependencies]
+numpy = "*"
+pandas = "*"
+scikit-learn = "*"
+
+[[package]]
 name = "waitress"
 version = "3.0.1"
 description = "Waitress WSGI server"
@@ -3281,4 +3296,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f6b4a1514c6e4caffddef33eb6589112fd1d91d9a99766eac74821117e08d23d"
+content-hash = "a740f23996c98d84cf06321fa0929902e11ce108b10e786f3eb7ae095a64b647"
