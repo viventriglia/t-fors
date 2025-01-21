@@ -190,7 +190,7 @@ def get_techtide_ionosondes(
         return pd.DataFrame({})
 
 
-def get_gfz_f107(end_date: str = None, last_n_days: int = 3) -> pd.DataFrame:
+def get_gfz_f107(end_date: str = None, last_n_days: int = 10) -> pd.DataFrame:
     """
     Convenience function that downloads F10.7 (adjusted) within a specified time
     interval as collected by GFZ German Research Centre for Geosciences
@@ -201,7 +201,7 @@ def get_gfz_f107(end_date: str = None, last_n_days: int = 3) -> pd.DataFrame:
         End date of the time interval in 'YYYY-MM-DD' format, by default None
         If None, the function returns the last `last_n_days` days retrieved
     last_n_days : int, optional
-        Number of days to return from the end of the dataset, by default 3
+        Number of days to return from the end of the dataset, by default 10
 
     Returns
     -------
@@ -244,7 +244,7 @@ def get_gfz_f107(end_date: str = None, last_n_days: int = 3) -> pd.DataFrame:
         + df["day"].astype(str)
     )
 
-    df = df.drop(columns=["year", "month", "day"]).set_index("date")
+    df = df.drop(columns=["year", "month", "day"]).set_index("date").ffill()
 
     if end_date is None:
         return df.tail(last_n_days)
