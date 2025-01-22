@@ -40,7 +40,7 @@ def get_real_time_data() -> pd.DataFrame:
         aggregation_function="median",
     ).round(2)
     # GFZ
-    df_hp_30 = get_gfz_hp30()
+    df_hp_30 = get_gfz_hp30(artificial_ffill=True)
     # NOAA
     df_l1 = get_noaa_l1(end_propagated_datetime=STOP_UTC_NOW)
     df_l1_30 = resample_time_series(
@@ -95,7 +95,8 @@ def get_real_time_data() -> pd.DataFrame:
             right_index=True,
         )
     )
-    # Solar and Dst data need to be repeated, since they're provided on a daily/hourly basis
+    # Solar and Dst data need to be repeated, since they're provided
+    # on a daily/hourly basis
     df_j["dst"] = df_j["dst"].ffill()
     df_j["f_107_adj"] = get_gfz_f107().dropna().tail(1).values[0, 0]
     # Solar zenith angle

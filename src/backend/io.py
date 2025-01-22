@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 from io import StringIO, BytesIO
 from pathlib import Path
 from typing import Literal
@@ -326,7 +327,9 @@ def _get_gfz_hp30(start: str, stop: str) -> pd.DataFrame:
     )
 
 
-def get_gfz_hp30(end_datetime: str = None, last_n_days: int = 1) -> pd.DataFrame:
+def get_gfz_hp30(
+    end_datetime: str = None, last_n_days: int = 1, artificial_ffill: bool = False
+) -> pd.DataFrame:
     """
     Convenience function that downloads Hp30 within a specified time interval
     as produced by GFZ German Research Centre for Geosciences
@@ -338,6 +341,9 @@ def get_gfz_hp30(end_datetime: str = None, last_n_days: int = 1) -> pd.DataFrame
         If None, the function returns the last `last_n_days` days retrieved
     last_n_days : int, optional
         Number of days to return from the end of the dataset, by default 1
+    artificial_ffill : float, optional
+        Fill in missing observations by propagating the observation for the previous
+        half hour, by default False
 
     Returns
     -------
@@ -388,6 +394,17 @@ def get_gfz_hp30(end_datetime: str = None, last_n_days: int = 1) -> pd.DataFrame
     df = (
         df.drop(columns=["year", "month", "day", "hour"]).dropna().set_index("datetime")
     )
+
+    # This is useful for handling the significant latency of Hp30 data
+    if artificial_ffill:
+        current_time = datetime.utcnow()
+        if current_time.minute < 30:
+            next_half_hour = current_time.replace(second=0, microsecond=0, minute=00)
+        else:
+            next_half_hour = current_time.replace(second=0, microsecond=0, minute=30)
+
+        if next_half_hour not in df.index:
+            df.loc[next_half_hour] = df.iloc[-1]["hp_30"]
 
     last_n_half_hours = 2 * 24 * last_n_days
     if end_datetime is None:
