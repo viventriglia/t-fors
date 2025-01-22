@@ -18,7 +18,7 @@ from backend.preprocess import (
     get_categories,
     get_solar_position,
 )
-from backend import ML_MODEL_COLS
+from backend import ML_MODEL_COLS, TOP_N_FEAT, FEAT_IMP_PATH
 
 
 def get_real_time_data() -> pd.DataFrame:
@@ -110,3 +110,37 @@ def get_real_time_data() -> pd.DataFrame:
         .rename(columns={"ie": "ie_fix", "iu": "iu_fix"})
         .astype(ML_MODEL_COLS)[ML_MODEL_COLS.keys()]
     )
+
+
+def get_quality_score(
+    df_data: pd.DataFrame, top_n_features: int = TOP_N_FEAT
+) -> tuple[float, bool]:
+    """
+    Computes the input quality score based on SHAP feature importances and checks if
+    it is below the minimum reliability threshold
+
+    Parameters
+    ----------
+    df_data : pd.DataFrame
+        DataFrame containing the near real-time data to be fed to the model
+    top_n_features : int, optional
+        Number of top features to consider when calculating the minimum reliability
+        threshold, by default TOP_N_FEAT
+
+    Returns
+    -------
+    tuple[float, bool]
+        A tuple containing the computed quality score (float) and a boolean indicating whether
+        the score is below the threshold (True for alert, False otherwise)
+    """
+    df_feat_imp = pd.read_pickle(FEAT_IMP_PATH).sort_values(
+        "normalised_feature_importance", ascending=False
+    )
+
+    input_quality_score = (
+        df_data.iloc[0].notna() * df_feat_imp["normalised_feature_importance"]
+    ).sum()
+    input_quality_thr = 4 * df_feat_imp.cumsum().iloc[top_n_features, 0] / 5
+    input_quality_alert = input_quality_score < input_quality_thr
+
+    return np.round(input_quality_score, 3), input_quality_alert

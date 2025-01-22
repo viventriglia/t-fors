@@ -9,6 +9,7 @@ BSN_DIST = 90_000
 
 # Data
 DATA_IN = Path("..", "data", "in")
+FEAT_IMP_PATH = Path("assets", "data", "feature_importances.pickle")
 
 # MLFlow & FastAPI
 ML_SERVER_URI = "http://localhost:5000"
@@ -51,6 +52,7 @@ ML_MODEL_COLS = {
     "velocity_ro": "float",
     "velocity_vt": "float",
 }
+TOP_N_FEAT = 8
 
 # FastAPI
 FASTAPI_SUMMARY = """
