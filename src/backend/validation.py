@@ -133,11 +133,11 @@ class OutputDataModel(BaseModel):
     prediction_hsens: int = Field(
         description="Binary output of the model with decision threshold set to 0.48, in order to achieve 60%-level recall"
     )
-    input_quality_score: float = Field(
-        description="Score describing quality of input near real-time data"
+    input_availability_score: float = Field(
+        description="Score (between 0 and 1) describing availability of near real-time data, based on feature importance of model inputs"
     )
-    input_quality_alert: bool = Field(
-        description="Whether the input quality score is below a minimum threshold"
+    input_availability_alert: bool = Field(
+        description="Whether the input availability score is below a minimum reliability threshold identified by the modeller"
     )
     ie_fix: Optional[float] = Field(
         description="Auroral-zone magnetic activity produced by enhanced ionospheric currents flowing below and within the auroral oval in the sector covered by the FMI-IMAGE magnetometer network"

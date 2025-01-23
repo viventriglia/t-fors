@@ -23,8 +23,8 @@ from model import (
     THRESH_HSENS,
 )
 from model.calibration import get_venn_abers_score, X_cal, y_cal
-from backend.utils import get_real_time_data, get_quality_score
-from backend.validation import InputDataModel, OutputDataModel
+from backend.utils import get_real_time_data, get_availability_score
+from backend.validation import InputDataModel, OutputDataModel, ResponseModel
 
 logging.basicConfig(
     level=logging.INFO,
@@ -96,7 +96,8 @@ async def get_data():
 def predict(model=Depends(get_model)):
     try:
         df = get_real_time_data()
-        input_quality_score, input_quality_thr = get_quality_score(df)
+        # Check availability of near real-time data
+        input_availability_score, input_availability_thr = get_availability_score(df)
         data_dict = df.to_dict(orient="records")[0]
 
         try:
@@ -135,8 +136,8 @@ def predict(model=Depends(get_model)):
             "prediction_hprec": prediction_hprec,
             "prediction_balan": prediction_balan,
             "prediction_hsens": prediction_hsens,
-            "input_quality_score": input_quality_score,
-            "input_quality_alert": input_quality_thr,
+            "input_availability_score": input_availability_score,
+            "input_availability_alert": input_availability_thr,
             **input_data,
         }
         return OutputDataModel(**output_data)

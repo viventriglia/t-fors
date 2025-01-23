@@ -113,11 +113,11 @@ def get_real_time_data() -> pd.DataFrame:
     )
 
 
-def get_quality_score(
+def get_availability_score(
     df_data: pd.DataFrame, top_n_features: int = TOP_N_FEAT
 ) -> tuple[float, bool]:
     """
-    Computes the input quality score based on SHAP feature importances and checks if
+    Computes the input availability score based on SHAP feature importances and checks if
     it is below the minimum reliability threshold
 
     Parameters
@@ -131,17 +131,17 @@ def get_quality_score(
     Returns
     -------
     tuple[float, bool]
-        A tuple containing the computed quality score (float) and a boolean indicating whether
+        A tuple containing the computed availability score (float) and a boolean indicating whether
         the score is below the threshold (True for alert, False otherwise)
     """
     df_feat_imp = pd.read_pickle(FEAT_IMP_PATH).sort_values(
         "normalised_feature_importance", ascending=False
     )
 
-    input_quality_score = (
+    input_availability_score = (
         df_data.iloc[0].notna() * df_feat_imp["normalised_feature_importance"]
     ).sum()
-    input_quality_thr = 4 * df_feat_imp.cumsum().iloc[top_n_features, 0] / 5
-    input_quality_alert = input_quality_score < input_quality_thr
+    input_availability_thr = 4 * df_feat_imp.cumsum().iloc[top_n_features, 0] / 5
+    input_availability_alert = input_availability_score < input_availability_thr
 
-    return np.round(input_quality_score, 3), input_quality_alert
+    return np.round(input_availability_score, 3), input_availability_alert
