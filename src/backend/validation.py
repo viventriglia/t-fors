@@ -241,3 +241,20 @@ class OutputDataModel(BaseModel):
     velocity_vt: Optional[float] = Field(
         description="Velocity (m/s) of the perturbation (San Vito)"
     )
+
+
+class MetadataModel(BaseModel):
+    producer: str = Field(
+        description="Institution responsible for generating the forecast"
+    )
+    contact: str = Field(
+        description="Contact email for inquiries regarding the product"
+    )
+    product: str = Field(description="Name of the product")
+    product_description: str = Field(description="Short description of the product")
+    refresh_rate: str = Field(description="Frequency of forecast updates")
+
+
+class ResponseModel(BaseModel):
+    metadata: MetadataModel
+    data: OutputDataModel

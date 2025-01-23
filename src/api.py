@@ -91,7 +91,7 @@ async def get_data():
     "/predict",
     tags=["predict"],
     summary="Get predictions based on near real-time data using a pre-trained model",
-    response_model=OutputDataModel,
+    response_model=ResponseModel,
 )
 def predict(model=Depends(get_model)):
     try:
@@ -100,12 +100,13 @@ def predict(model=Depends(get_model)):
         input_availability_score, input_availability_thr = get_availability_score(df)
         data_dict = df.to_dict(orient="records")[0]
 
+        # Data validation before feeding the model
         try:
             validated_data = InputDataModel(**data_dict)
         except ValidationError as e:
             raise HTTPException(status_code=400, detail=f"Validation error: {e}")
-
         df_validated = pd.DataFrame([validated_data.model_dump()])
+
         # Raw CatBoost score
         prediction_score = model.predict_proba(df_validated)
         # Calibrated score
@@ -127,6 +128,7 @@ def predict(model=Depends(get_model)):
         prediction_balan = 1 if prediction_score > THRESH_BALAN else 0
         prediction_hsens = 1 if prediction_score > THRESH_HSENS else 0
 
+        # Working out the endpoint response
         input_data = df.fillna("").replace("", None).to_dict(orient="records")[0]
         output_data = {
             "datetime_ref": df.index[0],
@@ -140,7 +142,17 @@ def predict(model=Depends(get_model)):
             "input_availability_alert": input_availability_thr,
             **input_data,
         }
-        return OutputDataModel(**output_data)
+
+        return ResponseModel(
+            metadata={
+                "producer": "INGV, Istituto Nazionale di Geofisica e Vulcanologia, Via di Vigna Murata 605, Roma (Italy)",
+                "contact": "eswua@ingv.it",
+                "product": "LSTID forecasting",
+                "product_description": "Traveling Ionospheric Disturbances Forecasting System (T-FORS), funded by the European Community, Horizon Europe",
+                "refresh_rate": "30 minutes",
+            },
+            data=OutputDataModel(**output_data),
+        )
 
     except HTTPException as e:
         raise e
