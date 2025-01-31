@@ -1,9 +1,12 @@
 import pickle
 
+import numpy as np
 from venn_abers import VennAbersCalibrator
+
 from . import CALIB_X_DATA_PATH, CALIB_Y_DATA_PATH
 
 
+@np.errstate(divide="ignore", invalid="ignore")
 def get_venn_abers_score(p_cal, y_cal, p_test):
     calibrator = VennAbersCalibrator(inductive=True)
 
