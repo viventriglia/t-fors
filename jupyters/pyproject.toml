@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "t-fors-api"
+name = "t-fors-repl"
 version = "0.1.0"
 description = "Traveling Ionospheric Disturbances Forecasting System"
 authors = ["Vincenzo <vincenzo.ventriglia@outlook.com>"]
@@ -24,6 +24,7 @@ jupyter = "^1.0.0"
 notebook = "6.5.3"
 traitlets = "5.9.0"
 venn-abers = "^1.4.6"
+quarto = "^0.1.0"
 
 
 [build-system]
