@@ -4,4 +4,5 @@ __pycache__/
 .ipynb_checkpoints/
 catboost_info/
 *.md
+*.html
 Dockerfile
