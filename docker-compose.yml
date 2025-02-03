@@ -1,0 +1,33 @@
+services:
+  web-app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    image: t-fors-web-app:latest
+    container_name: t-fors-web-app
+    restart: unless-stopped
+    ports:
+      - 8501:8501
+
+  api:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    image: t-fors-api:latest
+    container_name: t-fors-api
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+
+  jupyter:
+    build:
+      context: .
+      dockerfile: ./jupyters/Dockerfile
+    image: t-fors-jupyter:latest
+    container_name: t-fors-jupyter
+    volumes:
+      - ./src/:/app/src/
+      - ./jupyters:/app/jupyters
+      - ./data:/app/data
+    ports:
+      - ${JUPYTER_PORT:-8890}:${JUPYTER_PORT:-8890}
