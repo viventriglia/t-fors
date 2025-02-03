@@ -4,19 +4,17 @@ from PIL import Image
 APP_VERSION = "0.2.3"
 
 # Data/images/model
-DATA_PATH = Path(Path(__file__).parents[1], "data", "out")
-IMAGES_PATH = Path(Path(__file__).parents[1], "images", "app")
+DATA_PATH = Path("assets", "data")
+IMAGES_PATH = Path("assets", "images")
 FAVICON = Image.open(Path(IMAGES_PATH, "favicon.png"))
 LOGO = Image.open(Path(IMAGES_PATH, "logo.png"))
 EU_LOGO_NEG = Image.open(Path(IMAGES_PATH, "funded_by_the_EU_RGB_neg.png"))
 EU_LOGO_WHT = Image.open(Path(IMAGES_PATH, "funded_by_the_EU_RGB_white_outline.png"))
 MODEL_PATH = Path(
-    Path(__file__).parents[1],
-    "mlruns",
+    "assets",
+    "models",
     "836438889763744696",
     "47379e58abff4b18989898a5b6ecbe08",
-    "artifacts",
-    "model",
     "model.cb",
 )
 
