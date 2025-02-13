@@ -52,6 +52,19 @@ ML_MODEL_COLS = {
     "velocity_ro": "float",
     "velocity_vt": "float",
 }
+HUMAN_READABLE_MAPPING = {
+    "ie_fix": "ie",
+    "ie_mav_3h": "ie_3h_exp_mov_avg",
+    "ie_mav_12h": "ie_12h_exp_mov_avg",
+    "iu_fix": "iu",
+    "iu_mav_3h": "iu_3h_exp_mov_avg",
+    "iu_mav_12h": "iu_12h_exp_mov_avg",
+    "hf": "hf_int",
+    "hf_mav_2h": "hf_int_2h_exp_mov_avg",
+    "bz": "imf_bz",
+    "speed": "imf_speed",
+    "rho": "imf_rho",
+}
 TOP_N_FEAT = 8
 
 # FastAPI

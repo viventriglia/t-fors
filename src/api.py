@@ -15,6 +15,7 @@ from backend import (
     FASTAPI_CONTACT,
     FASTAPI_LICENSE,
     FASTAPI_FAVICON_PATH,
+    HUMAN_READABLE_MAPPING,
 )
 from model import (
     MODEL_PATH,
@@ -129,15 +130,20 @@ def predict(model=Depends(get_model)):
         prediction_hsens = 1 if prediction_score > THRESH_HSENS else 0
 
         # Working out the endpoint response
-        input_data = df.fillna("").replace("", None).to_dict(orient="records")[0]
+        input_data = (
+            df.fillna("")
+            .replace("", None)
+            .rename(columns=HUMAN_READABLE_MAPPING)
+            .to_dict(orient="records")[0]
+        )
         output_data = {
-            "datetime_ref": df.index[0],
-            "datetime_run": datetime.utcnow(),
-            "prediction_score": np.round(prediction_score, 3),
-            "prediction_calib": np.round(prediction_calib, 3),
-            "prediction_hprec": prediction_hprec,
-            "prediction_balan": prediction_balan,
-            "prediction_hsens": prediction_hsens,
+            "dt": df.index[0],
+            "dt_run": datetime.utcnow(),
+            "lstid_occurrence_score": np.round(prediction_score, 3),
+            "lstid_occurrence_probability": np.round(prediction_calib, 3),
+            "lstid_high_precision_prediction": prediction_hprec,
+            "lstid_balanced_prediction": prediction_balan,
+            "lstid_high_sensitivity_prediction": prediction_hsens,
             "input_availability_score": input_availability_score,
             "input_availability_alert": input_availability_thr,
             **input_data,

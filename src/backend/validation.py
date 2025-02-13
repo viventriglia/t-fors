@@ -114,23 +114,23 @@ class InputDataModel(BaseModel):
 class OutputDataModel(BaseModel):
     """(Pydantic-based) schema of model output"""
 
-    datetime_ref: datetime = Field(
+    dt: datetime = Field(
         description="Reference date and time (UTC) for the data used by the model"
     )
-    datetime_run: datetime = Field(description="Date and time (UTC) of model run")
-    prediction_score: float = Field(
+    dt_run: datetime = Field(description="Date and time (UTC) of model run")
+    lstid_occurrence_score: float = Field(
         description="Raw model score, where a higher one means the model is more confident in its prediction; this score is related to the probability of an observation belonging to the positive class (LSTID in the following 3 hrs)"
     )
-    prediction_calib: float = Field(
+    lstid_occurrence_probability: float = Field(
         description="Calibrated model score (with Venn-ABERS), where a higher score means the model is more confident in its prediction; this score is related to the probability of an observation belonging to the positive class (LSTID in the following 3 hrs)"
     )
-    prediction_hprec: int = Field(
+    lstid_high_precision_prediction: int = Field(
         description="Binary output of the model with decision threshold set to 0.84, in order to achieve 80%-level precision"
     )
-    prediction_balan: int = Field(
+    lstid_balanced_prediction: int = Field(
         description="Binary output of the model with decision threshold set to 0.64 (mean cross-validated F1-score: 0.55)"
     )
-    prediction_hsens: int = Field(
+    lstid_high_sensitivity_prediction: int = Field(
         description="Binary output of the model with decision threshold set to 0.48, in order to achieve 60%-level recall"
     )
     input_availability_score: float = Field(
@@ -139,34 +139,34 @@ class OutputDataModel(BaseModel):
     input_availability_alert: bool = Field(
         description="Whether the input availability score is below a minimum reliability threshold identified by the modeller"
     )
-    ie_fix: Optional[float] = Field(
+    ie: Optional[float] = Field(
         description="Auroral-zone magnetic activity produced by enhanced ionospheric currents flowing below and within the auroral oval in the sector covered by the FMI-IMAGE magnetometer network"
     )
     ie_variation: Optional[int] = Field(
         description="Change in the IE index (increase, decrease, stationary)"
     )
-    ie_mav_3h: Optional[float] = Field(
+    ie_3h_exp_mov_avg: Optional[float] = Field(
         description="IE exponential moving averages within 3-hours window"
     )
-    ie_mav_12h: Optional[float] = Field(
+    ie_12h_exp_mov_avg: Optional[float] = Field(
         description="IE exponential moving averages within 12-hours window"
     )
-    iu_fix: Optional[float] = Field(
+    iu: Optional[float] = Field(
         description="Strongest current intensities of the eastward auroral electrojets in the sector covered by the FMI-IMAGE magnetometer network"
     )
     iu_variation: Optional[int] = Field(
-        description="Change in the IE index (increase, decrease, stationary)"
+        description="Change in the IU index (increase, decrease, stationary)"
     )
-    iu_mav_3h: Optional[float] = Field(
-        description="IE exponential moving averages within 3-hours window"
+    iu_3h_exp_mov_avg: Optional[float] = Field(
+        description="IU exponential moving averages within 3-hours window"
     )
-    iu_mav_12h: Optional[float] = Field(
-        description="IE exponential moving averages within 12-hours window"
+    iu_12h_exp_mov_avg: Optional[float] = Field(
+        description="IU exponential moving averages within 12-hours window"
     )
-    hf: Optional[float] = Field(
+    hf_int: Optional[float] = Field(
         description="High-Frequency interferometry (HF-INT) index, identifying activity over the European network of ionosondes"
     )
-    hf_mav_2h: Optional[float] = Field(
+    hf_int_2h_exp_mov_avg: Optional[float] = Field(
         description="HF-INT exponential moving averages within 2-hours window"
     )
     f_107_adj: Optional[float] = Field(
@@ -182,11 +182,11 @@ class OutputDataModel(BaseModel):
     newell: Optional[float] = Field(
         description="Coupling function which quantifies the energy transfer from the magnetosphere to the ionosphere"
     )
-    bz: Optional[float] = Field(
+    imf_bz: Optional[float] = Field(
         description="Strength of the interplanetary magnetic field in a north/south direction"
     )
-    speed: Optional[float] = Field(description="Solar wind flux radial velocity")
-    rho: Optional[float] = Field(description="Solar wind flux density")
+    imf_speed: Optional[float] = Field(description="Solar wind flux radial velocity")
+    imf_rho: Optional[float] = Field(description="Solar wind flux density")
     spectral_contribution_at: Optional[float] = Field(
         description="Spectral energy contribution (%) of the perturbation (Athens)"
     )
