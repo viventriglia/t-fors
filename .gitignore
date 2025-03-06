@@ -54,6 +54,7 @@ cython_debug/
 # Data
 data/**/*.csv
 jupyters/*.gz
+jupyters/*.zip
 
 # CatBoost model stuff
 jupyters/catboost_info/*
